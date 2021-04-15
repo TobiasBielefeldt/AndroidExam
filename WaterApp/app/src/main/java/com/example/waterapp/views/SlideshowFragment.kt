@@ -1,4 +1,4 @@
-package com.example.waterapp.ui.slideshow
+package com.example.waterapp.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.waterapp.R
+import com.example.waterapp.viewmodels.SlideshowViewModel
 
 class SlideshowFragment : Fragment() {
 
