@@ -1,6 +1,7 @@
 package com.example.waterapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -13,6 +14,9 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.waterapp.database.AppDatabase
+import com.example.waterapp.database.PersonalPlant
+import com.example.waterapp.database.PersonalPlantDao
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +24,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val db: AppDatabase = AppDatabase.getAppDatabase(this)!!
+        val dao: PersonalPlantDao = db.personalPlantDao()
+
+        dao.nukeTable()
+        dao.insert(PersonalPlant.getBasicPlant()!!)
+
+        Log.w("Tag","Holy shit" + dao.countPlants().toString())
+
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
