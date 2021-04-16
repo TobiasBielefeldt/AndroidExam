@@ -10,7 +10,11 @@ import java.util.*
 @Entity(tableName = "personalPlant")
 class PersonalPlant {
     @JvmField
+    @NonNull
     @PrimaryKey
+    var personalPlantID: String? = null
+
+    @JvmField
     @NonNull
     var uid: String? = null
 
@@ -31,6 +35,7 @@ class PersonalPlant {
         fun getBasicPlant(): PersonalPlant?
         {
             val plant = PersonalPlant()
+            plant.personalPlantID = UUID.randomUUID().toString()
             plant.uid = UUID.randomUUID().toString()
             plant.personalName = "test"
             plant.plantSize = 2
