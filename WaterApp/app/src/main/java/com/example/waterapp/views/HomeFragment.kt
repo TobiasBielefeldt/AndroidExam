@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
 import com.example.waterapp.R
+import com.example.waterapp.database.AppDatabase
 import com.example.waterapp.viewmodels.HomeViewModel
 
 class HomeFragment : Fragment() {

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1055218865944",
+    "firebase_url": "https://waterapp-b03fd-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "waterapp-b03fd",
+    "storage_bucket": "waterapp-b03fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055218865944:android:dccf83a79d5a34575c706d",
+        "android_client_info": {
+          "package_name": "com.example.waterapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1055218865944-dcu5k7e1fvv9cjjda0kc1t49v5msfjki.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEvXAl6lEE0xQXZls0P75ly0Sktg0Vjgk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1055218865944-dcu5k7e1fvv9cjjda0kc1t49v5msfjki.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

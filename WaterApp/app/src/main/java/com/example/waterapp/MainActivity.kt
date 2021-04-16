@@ -1,18 +1,29 @@
 package com.example.waterapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.example.waterapp.database.AppDatabase
+import com.example.waterapp.database.PersonalPlant
+import com.example.waterapp.database.PersonalPlantDao
+import com.example.waterapp.database.Plant
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.Task
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.*
+import java.lang.Exception
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +31,47 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val db: AppDatabase = AppDatabase.getAppDatabase(this)!!
+
+        val personalPlantDao: PersonalPlantDao = db.personalPlantDao()
+        val plantDao = db.plantDao()
+
+        //Nuketable removes everything fron the table
+        plantDao.nukeTable()
+        //Insert takes a plant in inserts it. Get basic plant just creates a template plant
+        plantDao.insert(Plant.getBasicPlant()!!)
+
+        //See above
+        personalPlantDao.nukeTable()
+        personalPlantDao.insert(PersonalPlant.getBasicPlant()!!)
+
+        //Write the cout of each database (Should be 1 in each as we first remove everything and then add 1 new)
+        Log.w("Plant Count", "Personal plant count: " + personalPlantDao.countPlants().toString())
+        Log.w("Plant Count", "Abstract Plant count: " + personalPlantDao.countPlants().toString())
+
+        val rootNode: FirebaseDatabase = FirebaseDatabase.getInstance()
+        val plants = rootNode.getReference("Plants")
+
+        //Creates a new plant with id fa405ab3-8b31-45ef-a15a-c8d74bfb7h45 and value 6
+        //If id already exist it will just update the value
+        plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb7h45").setValue(6)
+
+        //Checks if the quey was succesful and if it was print the value to logcat
+        val completeListener = object : OnCompleteListener<DataSnapshot>{
+            override fun onComplete(p0: Task<DataSnapshot>) {
+                Log.w("Tag", "onComplete " + p0.isSuccessful)
+                if (p0.isSuccessful)
+                {
+                    Log.w("Plant Count", p0.result.toString())
+                }
+            }
+        }
+        //Gets the child with ID fa405ab3-8b31-45ef-a15a-c8d74bfb5b45 from the database on does "something" to it (As specified in the complete listener)
+        plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45").get().addOnCompleteListener(completeListener)
+
+
+
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
