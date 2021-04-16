@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         val personalPlantDao: PersonalPlantDao = db.personalPlantDao()
         val plantDao = db.plantDao()
 
-        //Nuketable removes everything fron the table
+        //Nuketable removes everything from the table
         plantDao.nukeTable()
         //Insert takes a plant in inserts it. Get basic plant just creates a template plant
         plantDao.insert(Plant.getBasicPlant()!!)
@@ -57,6 +57,20 @@ class MainActivity : AppCompatActivity() {
         //If id already exist it will just update the value
         plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb7h45").setValue(6)
 
+
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val value = snapshot.value
+
+                Log.w("DataChange", value.toString())
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("DataChangeError", error.details)
+            }
+
+        }
         //Checks if the quey was succesful and if it was print the value to logcat
         val completeListener = object : OnCompleteListener<DataSnapshot>{
             override fun onComplete(p0: Task<DataSnapshot>) {
@@ -67,6 +81,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        //Ads a value event listner that runs code every time any data on the firebase changes (Will return the enitre database)
+        plants.addValueEventListener(valueEventListener)
+
+        //Ads a value even listner that runs code every time the data for that child is changed (Will only return the new number in our case)
+        plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45").addValueEventListener(valueEventListener)
+
         //Gets the child with ID fa405ab3-8b31-45ef-a15a-c8d74bfb5b45 from the database on does "something" to it (As specified in the complete listener)
         plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45").get().addOnCompleteListener(completeListener)
 

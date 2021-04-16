@@ -12,6 +12,7 @@ import androidx.room.Room
 import com.example.waterapp.R
 import com.example.waterapp.database.AppDatabase
 import com.example.waterapp.viewmodels.HomeViewModel
+import com.google.firebase.database.FirebaseDatabase
 
 class HomeFragment : Fragment() {
 
