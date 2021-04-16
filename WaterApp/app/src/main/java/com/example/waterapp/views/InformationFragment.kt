@@ -9,22 +9,22 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.waterapp.R
-import com.example.waterapp.viewmodels.SlideshowViewModel
+import com.example.waterapp.viewmodels.InformationViewModel
 
-class SlideshowFragment : Fragment() {
+class InformationFragment : Fragment() {
 
-    private lateinit var slideshowViewModel: SlideshowViewModel
+    private lateinit var informationViewModel: InformationViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        slideshowViewModel =
-                ViewModelProvider(this).get(SlideshowViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_slideshow, container, false)
-        val textView: TextView = root.findViewById(R.id.text_slideshow)
-        slideshowViewModel.text.observe(viewLifecycleOwner, Observer {
+        informationViewModel =
+                ViewModelProvider(this).get(InformationViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_information, container, false)
+        val textView: TextView = root.findViewById(R.id.text_information)
+        informationViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root
