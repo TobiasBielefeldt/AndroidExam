@@ -34,6 +34,7 @@ class HomeFragment : Fragment() {
     //Tip of the Day
     private val tipViewModel: TipViewModel by activityViewModels()
     private lateinit var tipView: TextView
+    private lateinit var nextTip: TextView
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +53,7 @@ class HomeFragment : Fragment() {
         //Tip of the day
         tipView = root.findViewById(R.id.tipView)
         tipViewModel.randomTip()
+        nextTip = root.findViewById(R.id.nextTip)
 
         return root
     }
@@ -68,6 +70,8 @@ class HomeFragment : Fragment() {
         tipViewModel.tip.observe(viewLifecycleOwner) { tip ->
             tipView.text = tip.text
         }
+
+        nextTip.setOnClickListener { tipViewModel.randomTip() }
 
     }
 

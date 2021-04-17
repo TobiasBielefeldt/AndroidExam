@@ -12,4 +12,5 @@
     <string name="menu_search">Search</string>
     <string name="tip">Random tip</string>
     <string name="tip_of_the_day">Tip of the Day!</string>
+    <string name="nextTip"><u>Next Tip</u></string>
 </resources>
