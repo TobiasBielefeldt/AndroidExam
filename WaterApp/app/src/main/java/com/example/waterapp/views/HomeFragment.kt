@@ -1,7 +1,6 @@
 package com.example.waterapp.views
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +9,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterapp.R
 import com.example.waterapp.models.ImageAdapter
 import com.example.waterapp.viewmodels.HomeViewModel
+import com.example.waterapp.viewmodels.TipViewModel
+
 
 class HomeFragment : Fragment() {
 
@@ -29,11 +31,16 @@ class HomeFragment : Fragment() {
     private lateinit var mAdapter: RecyclerView.Adapter<*>
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    //Tip of the Day
+    private val tipViewModel: TipViewModel by activityViewModels()
+    private lateinit var tipView: TextView
+
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         root = inflater.inflate(R.layout.fragment_home, container, false) as ConstraintLayout
         textView = root.findViewById(R.id.textViewTest)
-        textView2 = root.findViewById(R.id.text_home)
 
         mRecyclerView = root.findViewById(R.id.my_recycler_view)
         mRecyclerView.setHasFixedSize(true)
@@ -42,26 +49,26 @@ class HomeFragment : Fragment() {
         mAdapter = ImageAdapter(this.requireContext())
         mRecyclerView.adapter = mAdapter
 
+        //Tip of the day
+        tipView = root.findViewById(R.id.tipView)
+        tipViewModel.randomTip()
+
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.w("Testing this works", "testing")
 
         homeViewModel.getSelectedPersonalPlant().observe(viewLifecycleOwner, Observer { plant ->
             textView.text = plant.second.name
             mCurrentPosition = plant.first
         })
 
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView2.text = it
-            Log.w("Testing this works", "damn")
-        })
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        // Observe the Tip LiveData and update the view on change
+        tipViewModel.tip.observe(viewLifecycleOwner) { tip ->
+            tipView.text = tip.text
+        }
 
     }
+
 }
