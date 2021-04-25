@@ -3,8 +3,6 @@ package com.example.waterapp.views
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -18,14 +16,12 @@ import com.example.waterapp.database.AppDatabase
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.database.PersonalPlantDao
 import com.example.waterapp.database.Plant
-import com.example.waterapp.viewmodels.HomeViewModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.*
-import androidx.lifecycle.observe
 
 
 class MainActivity : AppCompatActivity() {
@@ -59,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         //Creates a new plant with id fa405ab3-8b31-45ef-a15a-c8d74bfb7h45 and value 6
         //If id already exist it will just update the value
         plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb7h45").setValue(6)
-
 
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
