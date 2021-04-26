@@ -6,8 +6,9 @@ import androidx.lifecycle.ViewModel
 
 class SearchViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is search Fragment"
+    private val _list = MutableLiveData<ArrayList<String>>().apply {
+        val value =
+                listOf("Lahore", "Berlin", "Lisbon", "Tokyo", "Toronto", "Sydney", "Osaka", "Istanbul")
     }
-    val text: LiveData<String> = _text
+    val list: LiveData<ArrayList<String>> = _list
 }

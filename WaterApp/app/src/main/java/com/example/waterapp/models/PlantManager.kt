@@ -1,35 +1,35 @@
 package com.example.waterapp.models
 
-class PersonalPlantsManager {
+class PlantManager {
 
-    lateinit var plants: ArrayList<PersonalPlant>
+    lateinit var plants: ArrayList<Plant>
 
     init {
-        createPersonalPlants()
+        createPlants()
     }
 
-    private fun createPersonalPlants() {
+    private fun createPlants() {
         plants = ArrayList()
         plants.add(
-                PersonalPlant(
+                Plant(
                         "Orkide",
-                        5)
+                        "a description")
         )
         plants.add(
-                PersonalPlant(
+                Plant(
                         "Cactus",
-                        2
+                        "Damn plant"
                 )
         )
         plants.add(
-                PersonalPlant(
+                Plant(
                         "Monstera",
-                        8
+                        "This is another description"
                 )
         )
     }
 
-    fun getPersonalPlantNames(): Array<String?> {
+    fun getPlantNames(): Array<String?> {
         val names = arrayOfNulls<String>(plants.size)
 
         plants.forEachIndexed { i, plant ->
@@ -38,12 +38,12 @@ class PersonalPlantsManager {
         return names
     }
 
-    fun getPersonalPlantTime(): Array<Int?> {
-        val times = arrayOfNulls<Int>(plants.size)
+    fun getPlantDescription(): Array<String?> {
+        val descriptions = arrayOfNulls<String>(plants.size)
 
         plants.forEachIndexed { i, plant ->
-            times[i] = plant.time
+            descriptions[i] = plant.description
         }
-        return times
+        return descriptions
     }
 }
