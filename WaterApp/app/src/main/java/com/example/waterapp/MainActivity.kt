@@ -1,6 +1,7 @@
 package com.example.waterapp
 
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
@@ -13,14 +14,18 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.waterapp.database.AppDatabase
 import com.example.waterapp.database.PersonalPlant
-import com.example.waterapp.database.PersonalPlantDao
 import com.example.waterapp.database.Plant
+import com.example.waterapp.repositories.FirebaseRepository
+import com.example.waterapp.repositories.PersonalPlantRepository
+import com.example.waterapp.repositories.PlantRepository
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,65 +35,53 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //This should run ones when the app starts and never again (Properly)
         val db: AppDatabase = AppDatabase.getAppDatabase(this)!!
 
-        val personalPlantDao: PersonalPlantDao = db.personalPlantDao()
-        val plantDao = db.plantDao()
+        //Call singleton to get an instance
+        val personalPlantRepository = PersonalPlantRepository.getInstance()
+        val plantRepository = PlantRepository.getInstance()
 
-        //Nuketable removes everything from the table
-        plantDao.nukeTable()
-        //Insert takes a plant in inserts it. Get basic plant just creates a template plant
-        plantDao.insert(Plant.getBasicPlant()!!)
+        //Database stuff should be done in a Coroutine
+        GlobalScope.launch{
+            //Nuketable removes everything from the table
+            plantRepository.nukeTable()
+            //Insert takes a plant in inserts it. Get basic plant just creates a template plant
+            plantRepository.insert(Plant.getBasicPlant()!!)
 
-        //See above
-        personalPlantDao.nukeTable()
-        personalPlantDao.insert(PersonalPlant.getBasicPlant()!!)
+            //See above
+            personalPlantRepository.nukeTable()
+            personalPlantRepository.insert(PersonalPlant.getBasicPlant()!!)
 
-        //Write the cout of each database (Should be 1 in each as we first remove everything and then add 1 new)
-        Log.w("Plant Count", "Personal plant count: " + personalPlantDao.countPlants().toString())
-        Log.w("Plant Count", "Abstract Plant count: " + personalPlantDao.countPlants().toString())
+            //Write the cout of each database (Should be 1 in each as we first remove everything and then add 1 new)
+            Log.w("Plant Count", "Personal plant count: " + personalPlantRepository.count().toString())
+            Log.w("Plant Count", "Abstract Plant count: " + plantRepository.count().toString())
+        }
 
-        val rootNode: FirebaseDatabase = FirebaseDatabase.getInstance()
-        val plants = rootNode.getReference("Plants")
+        val firebase = FirebaseRepository.getInstance()
+        //I dont think firebase has to be done in a corotoune since they use listners which wait for stuff to happen
 
-        //Creates a new plant with id fa405ab3-8b31-45ef-a15a-c8d74bfb7h45 and value 6
-        //If id already exist it will just update the value
-        plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb7h45").setValue(6)
+        //Increment or decrement plants with that id
+        firebase.decrementPlan("fa405ab3-8b31-45ef-a15a-c8d74bfb7h45")
+        firebase.incrementPlant("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45")
 
+        //Inserts a new plant with that id or updates the plant with that id
+        firebase.insertOrUpdate("fa405ab3-8b31-45ef-aaaa-c8d74bfb7h45", 23)
 
+        /*
+        This creates an even listner that activates when something changes on the database, it runs once before listening aswell
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                //Write code here (This prints as an example)
                 val value = snapshot.value
-
                 Log.w("DataChange", value.toString())
-
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("DataChangeError", error.details)
-            }
-
+            override fun onCancelled(error: DatabaseError) { }
         }
-        //Checks if the quey was succesful and if it was print the value to logcat
-        val completeListener = object : OnCompleteListener<DataSnapshot>{
-            override fun onComplete(p0: Task<DataSnapshot>) {
-                Log.w("Tag", "onComplete " + p0.isSuccessful)
-                if (p0.isSuccessful)
-                {
-                    Log.w("Plant Count", p0.result.toString())
-                }
-            }
-        }
-        //Ads a value event listner that runs code every time any data on the firebase changes (Will return the enitre database)
-        plants.addValueEventListener(valueEventListener)
+        //Adds the valueEventListner to a plant with the id
+        firebase.getChild("fa405ab3-8b31-45ef-aaaa-c8d74bfb7h45").addValueEventListener(valueEventListener)
 
-        //Ads a value even listner that runs code every time the data for that child is changed (Will only return the new number in our case)
-        plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45").addValueEventListener(valueEventListener)
-
-        //Gets the child with ID fa405ab3-8b31-45ef-a15a-c8d74bfb5b45 from the database on does "something" to it (As specified in the complete listener)
-        plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45").get().addOnCompleteListener(completeListener)
-
-
+        */
 
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
