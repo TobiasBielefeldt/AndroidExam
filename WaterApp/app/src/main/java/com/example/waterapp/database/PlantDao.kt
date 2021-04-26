@@ -8,7 +8,10 @@ import androidx.room.Update
 @Dao
 interface PlantDao {
     @Query("SELECT * FROM plant")
-    fun getPlants(): Plant
+    fun getAllPlants(): List<Plant>
+
+    @Query("SELECT * FROM plant WHERE Plant.uid = :id")
+    fun getPlantFromID(id : String): Plant
 
     @Update
     fun update(plant: Plant): Int
@@ -17,7 +20,7 @@ interface PlantDao {
     fun insert(plant: Plant)
 
     @Query("SELECT COUNT(*) FROM plant")
-    fun countPlants(): Int
+    fun count(): Int
 
     @Query("DELETE FROM plant")
     fun nukeTable()

@@ -9,13 +9,16 @@ import androidx.room.Update
 interface PersonalPlantDao {
 
     @Query("SELECT * FROM personalPlant")
-    fun getPlants(): PersonalPlant
+    fun getAllPersonalPlants(): List<PersonalPlant>
 
     @Update
     fun update(personalPlant: PersonalPlant): Int
 
     @Insert
     fun insert(personalPlant: PersonalPlant)
+
+    @Query("SELECT * FROM personalPlant WHERE personalPlantID = :id")
+    fun getPersonalPlantFromID(id : String): PersonalPlant
 
     @Query("SELECT COUNT(*) FROM personalPlant")
     fun countPlants(): Int
