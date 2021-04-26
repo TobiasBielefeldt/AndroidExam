@@ -9,17 +9,17 @@
         android:id="@+id/nav_home"
         android:name="com.example.waterapp.views.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/home_fragment" />
 
     <fragment
         android:id="@+id/nav_information"
         android:name="com.example.waterapp.views.InformationFragment"
         android:label="@string/menu_information"
-        tools:layout="@layout/fragment_information" />
+        tools:layout="@layout/information_fragment" />
 
     <fragment
         android:id="@+id/nav_search"
         android:name="com.example.waterapp.views.SearchFragment"
         android:label="@string/menu_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/search_fragment" />
 </navigation>

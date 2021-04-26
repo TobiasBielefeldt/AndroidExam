@@ -14,30 +14,28 @@ class SearchFragment : Fragment() {
 
     private val plantViewModel: PlantViewModel by activityViewModels()
     private lateinit var listView: ListView
+    private lateinit var searchView: SearchView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_search, container, false)
-        listView = root.findViewById(R.id.listView)
-        val searchView: SearchView = root.findViewById(R.id.searchView)
+        val root = inflater.inflate(R.layout.search_fragment, container, false)
+        listView = root.findViewById(R.id.listSearchView)
+        searchView = root.findViewById(R.id.searchView)
 
-        val bestCities =
-                listOf("Lahore", "Berlin", "Lisbon", "Tokyo", "Toronto", "Sydney", "Osaka", "Istanbul")
-        var adapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_list_item_1, bestCities)
+        //Setting the listView to getPlantNames()
+        var adapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_list_item_1, plantViewModel.getPlantNames())
         listView.adapter = adapter
+
+        //Setting listener on searchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-                //Performs search when user hit the search button on the keyboard
-//                if (bestCities.contains(p0)) {
-//                    adapter.filter.filter(p0)
-//                } else {
-//                    Toast.makeText(this@MainActivity, "No match found", Toast.LENGTH_SHORT).show()
-//                }
+            //Performs search when user hit the search button on the keyboard
+            override fun onQueryTextSubmit(searchedWord: String?): Boolean {
+                //Not used here, since text changes is used instead
                 return false
             }
 
-            override fun onQueryTextChange(p0: String?): Boolean {
-                //Start filtering the list as user start entering the characters
-                adapter.filter.filter(p0)
+            //Start filtering the list as user start entering the characters
+            override fun onQueryTextChange(searchedWord: String?): Boolean {
+                adapter.filter.filter(searchedWord)
                 return false
             }
         })

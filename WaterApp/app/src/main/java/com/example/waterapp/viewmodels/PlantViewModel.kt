@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.example.waterapp.models.Plant
 
 class PlantViewModel : ViewModel(){
-    private lateinit var plants: ArrayList<Plant>
-    private lateinit var PlantNames: Array<String?>
+    private lateinit var plants: MutableList<Plant>
+    private lateinit var PlantNames: MutableList<String>
     private var selectedPlant = MutableLiveData<Pair<Int, Plant>>()
     private val PlantManager = com.example.waterapp.models.PlantManager()
 
@@ -24,7 +24,7 @@ class PlantViewModel : ViewModel(){
         selectedPlant.value = Pair(position, plants[position])
     }
 
-    fun getPlantNames(): Array<String?> {
+    fun getPlantNames(): MutableList<String> {
         return PlantNames
     }
 

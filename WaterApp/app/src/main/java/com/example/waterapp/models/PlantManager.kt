@@ -2,14 +2,15 @@ package com.example.waterapp.models
 
 class PlantManager {
 
-    lateinit var plants: ArrayList<Plant>
+    lateinit var plants: MutableList<Plant>
 
     init {
         createPlants()
     }
 
     private fun createPlants() {
-        plants = ArrayList()
+        plants =  mutableListOf()
+
         plants.add(
                 Plant(
                         "Orkide",
@@ -29,17 +30,17 @@ class PlantManager {
         )
     }
 
-    fun getPlantNames(): Array<String?> {
-        val names = arrayOfNulls<String>(plants.size)
+    fun getPlantNames(): MutableList<String> {
+        val names = mutableListOf<String>()
 
-        plants.forEachIndexed { i, plant ->
-            names[i] = plant.name
+        plants.forEach {plant ->
+            names.add(plant.name)
         }
         return names
     }
 
-    fun getPlantDescription(): Array<String?> {
-        val descriptions = arrayOfNulls<String>(plants.size)
+    fun getPlantDescription(): MutableList<String> {
+        val descriptions = mutableListOf<String>()
 
         plants.forEachIndexed { i, plant ->
             descriptions[i] = plant.description

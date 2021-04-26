@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        root = inflater.inflate(R.layout.fragment_home, container, false) as ConstraintLayout
+        root = inflater.inflate(R.layout.home_fragment, container, false) as ConstraintLayout
         textView = root.findViewById(R.id.textViewTest)
 
         mRecyclerView = root.findViewById(R.id.my_recycler_view)
@@ -60,11 +60,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        homeViewModel.getSelectedPersonalPlant().observe(viewLifecycleOwner, Observer { plant ->
-            textView.text = plant.second.name
-            mCurrentPosition = plant.first
-        })
 
         // Observe the Tip LiveData and update the view on change
         tipViewModel.tip.observe(viewLifecycleOwner) { tip ->

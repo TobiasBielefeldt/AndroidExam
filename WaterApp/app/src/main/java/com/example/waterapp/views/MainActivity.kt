@@ -16,6 +16,7 @@ import com.example.waterapp.database.AppDatabase
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.database.PersonalPlantDao
 import com.example.waterapp.database.Plant
+import com.example.waterapp.models.PlantManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -35,6 +36,8 @@ class MainActivity : AppCompatActivity() {
 
         val personalPlantDao: PersonalPlantDao = db.personalPlantDao()
         val plantDao = db.plantDao()
+
+        var plantManager = PlantManager()
 
         //Nuketable removes everything from the table
         plantDao.nukeTable()
