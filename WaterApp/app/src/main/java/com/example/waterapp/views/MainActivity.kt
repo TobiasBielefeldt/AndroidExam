@@ -1,4 +1,4 @@
-package com.example.waterapp
+package com.example.waterapp.views
 
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +11,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.waterapp.R
 import com.example.waterapp.database.AppDatabase
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.database.PersonalPlantDao
 import com.example.waterapp.database.Plant
+import com.example.waterapp.models.PlantManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -55,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         //If id already exist it will just update the value
         plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb7h45").setValue(6)
 
-
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val value = snapshot.value
@@ -88,8 +89,7 @@ class MainActivity : AppCompatActivity() {
         //Gets the child with ID fa405ab3-8b31-45ef-a15a-c8d74bfb5b45 from the database on does "something" to it (As specified in the complete listener)
         plants.child("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45").get().addOnCompleteListener(completeListener)
 
-
-
+        //set starting view
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
