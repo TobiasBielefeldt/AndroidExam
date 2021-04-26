@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
         val personalPlantDao: PersonalPlantDao = db.personalPlantDao()
         val plantDao = db.plantDao()
 
-        var plantManager = PlantManager()
-
         //Nuketable removes everything from the table
         plantDao.nukeTable()
         //Insert takes a plant in inserts it. Get basic plant just creates a template plant
