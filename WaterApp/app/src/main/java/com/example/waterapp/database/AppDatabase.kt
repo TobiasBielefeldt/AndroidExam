@@ -19,9 +19,10 @@ abstract class AppDatabase : RoomDatabase() {
                 INSTANCE = Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "plant-database")
                     // Allow queries on the main thread.
                     // Don't do this on a real app!
+                    //.allowMainThreadQueries
 
+                        //
                     .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
                     .build()
             }
             return INSTANCE
