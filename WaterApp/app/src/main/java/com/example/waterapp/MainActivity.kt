@@ -56,11 +56,8 @@ class MainActivity : AppCompatActivity() {
         //I don't think firebase has to be done in a corotoune since they use listners which wait for stuff to happen
 
         //Increment or decrement plants with that id
-        firebase.decrementPlan("fa405ab3-8b31-45ef-a15a-c8d74bfb7h45")
-        firebase.incrementPlant("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45")
-
-        //Inserts a new plant with that id or updates the plant with that id
-        firebase.insertOrUpdate("fa405ab3-8b31-45ef-aaaa-c8d74bfb7h45", 23)
+        //firebase.decrementPlan("fa405ab3-8b31-45ef-a15a-c8d74bfb7h45")
+        //firebase.incrementPlant("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45")
 
         /*
         This creates an even listner that activates when something changes on the database, it runs once before listening aswell
