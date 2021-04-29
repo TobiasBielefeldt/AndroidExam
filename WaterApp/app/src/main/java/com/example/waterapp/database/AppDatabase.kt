@@ -5,10 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Plant::class,PersonalPlant::class], version = 2, exportSchema = false)
+@Database(entities = [PersonalPlant::class], version = 5, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun personalPlantDao(): PersonalPlantDao
-    abstract fun plantDao(): PlantDao
 
     companion object {
         // Singleton to prevent multiple instances from existing
