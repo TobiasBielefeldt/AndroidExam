@@ -1,18 +1,15 @@
 package com.example.waterapp.views
 
-import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.waterapp.MainActivity
 import com.example.waterapp.R
 import com.example.waterapp.viewmodels.PlantViewModel
-import com.example.waterapp.viewmodels.SearchViewModel
-import com.google.android.gms.dynamic.SupportFragmentWrapper
 
 class SearchFragment : Fragment() {
 
@@ -31,6 +28,11 @@ class SearchFragment : Fragment() {
         //Set listener on listView checking if items are clicked
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             plantViewModel.selectPlantAt(position)
+            var fragmentManager = requireActivity().supportFragmentManager
+            fragmentManager
+                    .beginTransaction()
+                    .replace(this.searchView.id, InformationFragment())
+                    .commit()
             // Do something in response to the click
         }
 
