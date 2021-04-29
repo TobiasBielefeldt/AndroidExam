@@ -31,7 +31,7 @@ class SearchFragment : Fragment() {
             var fragmentManager = requireActivity().supportFragmentManager
             fragmentManager
                     .beginTransaction()
-                    .replace(this.searchView.id, InformationFragment())
+                    .replace(R.id.main_fragment, InformationFragment())
                     .commit()
             // Do something in response to the click
         }
