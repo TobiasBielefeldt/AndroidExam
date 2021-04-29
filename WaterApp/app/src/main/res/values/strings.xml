@@ -14,4 +14,7 @@
     <string name="tip_of_the_day">Tip of the Day!</string>
     <string name="nextTip"><u>Next Tip</u></string>
     <string name="image_of_plant">Image of plant</string>
+    <string name="homeButton">Home</string>
+    <string name="searchButton">Search</string>
+    <string name="add_new_plant">add new plant</string>
 </resources>

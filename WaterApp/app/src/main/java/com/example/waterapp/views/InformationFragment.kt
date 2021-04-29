@@ -1,6 +1,5 @@
 package com.example.waterapp.views
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,21 +8,18 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.waterapp.R
-import com.example.waterapp.database.Plant
-import com.example.waterapp.viewmodels.InformationViewModel
+import com.example.waterapp.helper.ImageHelper
 import com.example.waterapp.viewmodels.PlantViewModel
 
 class InformationFragment : Fragment() {
 
-    private lateinit var plant: Plant
     private val plantViewModel: PlantViewModel by activityViewModels()
-    private var mCurrentPosition = -1
     private lateinit var root: ConstraintLayout
+    private lateinit var imageView: ImageView
     private lateinit var nameView: TextView
     private lateinit var descriptionView: TextView
     private lateinit var sunView: TextView
@@ -37,6 +33,7 @@ class InformationFragment : Fragment() {
 
         root = inflater.inflate(R.layout.information_fragment, container, false) as ConstraintLayout
 
+        imageView = root.findViewById(R.id.imageView)
         nameView = root.findViewById(R.id.plantName)
         descriptionView = root.findViewById(R.id.plantDescription)
         sunView = root.findViewById(R.id.sunNeed)
@@ -50,7 +47,15 @@ class InformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         plantViewModel.getSelectedPlant().observe(viewLifecycleOwner) {
+            Glide.with(requireContext())
+                    .clear(imageView)
+            Glide.with(requireContext())
+                    .load(ImageHelper.getImage(it.name))
+                    .apply(RequestOptions().circleCrop())
+                    .into(imageView)
             nameView.text = it.name
             descriptionView.text = it.description
             sunView.text = plantViewModel.getSunDescription(it.sunNeed)
