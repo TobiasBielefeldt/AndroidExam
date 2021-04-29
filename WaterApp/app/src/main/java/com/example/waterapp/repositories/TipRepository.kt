@@ -1,4 +1,4 @@
-package com.example.waterapp.repository
+package com.example.waterapp.repositories
 
 import com.example.waterapp.models.Tip
 

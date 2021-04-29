@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.waterapp.models.Tip
-import com.example.waterapp.repository.TipRepository
+import com.example.waterapp.repositories.TipRepository
 
 class TipViewModel : ViewModel() {
 
