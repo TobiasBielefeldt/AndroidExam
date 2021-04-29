@@ -1,7 +1,6 @@
 package com.example.waterapp
 
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +17,9 @@ import com.example.waterapp.database.Plant
 import com.example.waterapp.repositories.FirebaseRepository
 import com.example.waterapp.repositories.PersonalPlantRepository
 import com.example.waterapp.repositories.PlantRepository
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.database.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -34,22 +30,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        var context = this;
         //This should run ones when the app starts and never again (Properly)
-        val db: AppDatabase = AppDatabase.getAppDatabase(this)!!
+
 
         //Call singleton to get an instance
-        val personalPlantRepository = PersonalPlantRepository.getInstance()
-        val plantRepository = PlantRepository.getInstance()
+
 
         //Database stuff should be done in a Coroutine
         GlobalScope.launch{
+            val db: AppDatabase = AppDatabase.getAppDatabase(context)!!
+            val personalPlantRepository = PersonalPlantRepository.getInstance()
+            val plantRepository = PlantRepository.getInstance()
             //Nuketable removes everything from the table
-            plantRepository.nukeTable()
             //Insert takes a plant in inserts it. Get basic plant just creates a template plant
-            plantRepository.insert(Plant.getBasicPlant()!!)
-
-            //See above
             personalPlantRepository.nukeTable()
             personalPlantRepository.insert(PersonalPlant.getBasicPlant()!!)
 
@@ -59,14 +53,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         val firebase = FirebaseRepository.getInstance()
-        //I dont think firebase has to be done in a corotoune since they use listners which wait for stuff to happen
+        //I don't think firebase has to be done in a corotoune since they use listners which wait for stuff to happen
 
         //Increment or decrement plants with that id
         //firebase.decrementPlan("fa405ab3-8b31-45ef-a15a-c8d74bfb7h45")
         //firebase.incrementPlant("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45")
-
-        //Inserts a new plant with that id or updates the plant with that id
-        firebase.insertOrUpdate("fa405ab3-8b31-45ef-aaaa-c8d74bfb7h45", 23)
 
         /*
         This creates an even listner that activates when something changes on the database, it runs once before listening aswell

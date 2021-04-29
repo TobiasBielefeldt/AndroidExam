@@ -1,28 +1,13 @@
 package com.example.waterapp.database
 
-import androidx.annotation.NonNull
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(tableName = "plant")
 class Plant {
-
-        @JvmField
-        @PrimaryKey
-        @NonNull
+        //We decided to not make this into a room database as we did not feel like it was needed
         var uid: String? = null
-
-        @JvmField
         var name: String? = null
-
-        @JvmField
         var description: String? = null
-
-        @JvmField
         var sunNeed: Int = 0
-
-        @JvmField
         var waterNeed: Int = 0
 
         companion object {
@@ -38,7 +23,15 @@ class Plant {
                 return plant
             }
 
-
+            fun createNewPlant(uid: String, name: String, description: String, sunNeed : Int, waterNeed: Int): Plant
+            {
+                val plant = Plant()
+                plant.uid = uid
+                plant.name = name
+                plant.description = description
+                plant.sunNeed = sunNeed
+                plant.waterNeed = waterNeed
+                return plant
+            }
         }
-
 }
