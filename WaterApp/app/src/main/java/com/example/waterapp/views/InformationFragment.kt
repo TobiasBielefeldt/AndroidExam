@@ -1,45 +1,81 @@
 package com.example.waterapp.views
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.waterapp.R
+import com.example.waterapp.database.Plant
 import com.example.waterapp.viewmodels.InformationViewModel
 import com.example.waterapp.viewmodels.PlantViewModel
 
 class InformationFragment : Fragment() {
 
-    private val informationViewModel: InformationViewModel by activityViewModels()
+    private lateinit var plant: Plant
     private val plantViewModel: PlantViewModel by activityViewModels()
     private var mCurrentPosition = -1
     private lateinit var root: ConstraintLayout
+    private lateinit var nameView: TextView
+    private lateinit var descriptionView: TextView
+    private lateinit var sunView: TextView
+    private lateinit var waterView: TextView
+    private lateinit var waterIcons: LinearLayout
+    private lateinit var sunIcons: LinearLayout
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
         root = inflater.inflate(R.layout.information_fragment, container, false) as ConstraintLayout
-        val textView: TextView = root.findViewById(R.id.text_information)
-        informationViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+
+        nameView = root.findViewById(R.id.plantName)
+        descriptionView = root.findViewById(R.id.plantDescription)
+        sunView = root.findViewById(R.id.sunNeed)
+        sunIcons = root.findViewById(R.id.sunIcons)
+        waterView = root.findViewById(R.id.waterNeed)
+        waterIcons = root.findViewById(R.id.waterIcons)
+
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val plantName: TextView = root.findViewById(R.id.plantName)
 
         plantViewModel.getSelectedPlant().observe(viewLifecycleOwner) {
-            plantName.text = it.second.name
+            nameView.text = it.second.name
+            descriptionView.text = it.second.description
+            sunView.text = plantViewModel.getSunDescription(it.second.sunNeed)
+            repeat(it.second.sunNeed) {
+                var imageView = ImageView(this.requireContext())
+                Glide.with(requireContext())
+                        .load(R.drawable.sun)
+                        .into(imageView)
+                sunIcons.addView(imageView)
+                imageView.layoutParams.height = 100
+                imageView.layoutParams.width = 100
+            }
+            waterView.text = plantViewModel.getWaterDescription(it.second.waterNeed)
+            repeat(it.second.waterNeed) {
+                var imageView = ImageView(this.requireContext())
+                Glide.with(requireContext())
+                        .load(R.drawable.water_drop)
+                        .into(imageView)
+                waterIcons.addView(imageView)
+                imageView.layoutParams.height = 100
+                imageView.layoutParams.width = 100
+            }
             mCurrentPosition = it.first
         }
+
+
     }
 }

@@ -18,6 +18,14 @@ class PlantRepository()
         return plantDatabase
     }
 
+    fun getAllPlantNames(): MutableList<String> {
+        val names = mutableListOf<String>()
+        getAllPlants().forEach {plant ->
+            names.add(plant.name.toString())
+        }
+        return names
+    }
+
     fun insert(plant: Plant)
     {
         plantDatabase.add(plant)
