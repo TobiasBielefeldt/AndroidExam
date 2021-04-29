@@ -19,7 +19,7 @@ class PersonalPlantRepository(private val personalPlantDao: PersonalPlantDao) {
         personalPlantDao.insert(personalPlant)
     }
 
-    //Gets a count of howmany there is (Thsi was mostly used for testing but I might be usefull)
+    //Gets a count of how many there is (This was mostly used for testing but I might be usefull)
     fun count(): Int {
         return personalPlantDao.countPlants()
     }
