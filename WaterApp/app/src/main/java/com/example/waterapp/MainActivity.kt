@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val firebase = FirebaseRepository.getInstance()
+
         /*
         This creates an even listner that activates when something changes on the database, it runs once before listening aswell
         val valueEventListener = object : ValueEventListener {

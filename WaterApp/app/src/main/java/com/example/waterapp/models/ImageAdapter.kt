@@ -39,7 +39,7 @@ class ImageAdapter (private val context: Context) : RecyclerView.Adapter<ImageAd
             }
 
             //This gets the image for the first plant using id (Just test uses)
-            val image = ImageHelper.getImage(plant!!.uid)
+            val image = ImageHelper.getImage(plant!!.name)
 
             Glide.with(context)
                     .clear(holder.imageView)

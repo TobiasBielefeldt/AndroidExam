@@ -12,10 +12,10 @@ class ImageHelper {
         var returnValue : Int = R.drawable.imagemissing
             when(uid)
             {
-                "9157751e-0708-4621-a73d-58d4ebd8c824" -> returnValue = R.drawable.some_kattemyter
-                "aad3a4b3-f7d9-4903-bb78-7a65f70d9cfc" -> returnValue = R.drawable.croton
-                "15d68476-c432-413f-9ca3-0533f44234a8" -> returnValue = R.drawable.orchid
-                "4835fb84-d604-4d6a-8469-0dbb11ef62f7" -> returnValue = R.drawable.cactus
+                "Cat-Plant" -> returnValue = R.drawable.some_kattemyter
+                "Croton" -> returnValue = R.drawable.croton
+                "Orchid" -> returnValue = R.drawable.orchid
+                "Cactus" -> returnValue = R.drawable.cactus
                 else -> {
                     Log.w("Image", "Something is wrong I can feel it: $uid")
                 }

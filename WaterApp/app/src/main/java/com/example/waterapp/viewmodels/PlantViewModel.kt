@@ -12,7 +12,7 @@ import com.example.waterapp.database.Plant
 class PlantViewModel : ViewModel(){
     private lateinit var plants: List<Plant>
     private lateinit var PlantNames: MutableList<String>
-    private var selectedPlant = MutableLiveData<Plant>()
+    private var selectedPlant:  MutableLiveData<Plant> = MutableLiveData()
     private val PlantRepository = com.example.waterapp.repositories.PlantRepository
 
     init {
@@ -25,11 +25,7 @@ class PlantViewModel : ViewModel(){
     }
 
     fun selectPlantAt(name: String) {
-        for (plant in plants){
-            if (plant.name == name){
-                selectedPlant = MutableLiveData(plant)
-            }
-        }
+        selectedPlant = MutableLiveData(PlantRepository.getInstance().getPlantFromName(name)!!)
     }
 
 

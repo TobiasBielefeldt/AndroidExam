@@ -12,44 +12,44 @@ class FirebaseRepository {
     private val plants = rootNode.getReference("Plants")
 
     //Updates the value with the plantID or creates a new one of the ID does not exist
-    fun insertOrUpdate(plantID: String, number: Int)
+    fun insertOrUpdate(plantName: String, number: Int)
     {
-        plants.child(plantID).setValue(number)
+        plants.child(plantName).setValue(number)
     }
 
     //Takes the string and gets the current value then increments it by 1 (It does this with a listener so I don't think a thread is needed)
-    fun incrementPlant(plantID: String)
+    fun incrementPlant(plantName: String)
     {
         val completeListener = object : OnCompleteListener<DataSnapshot> {
             override fun onComplete(p0: Task<DataSnapshot>) {
                 if (p0.isSuccessful)
                 {
-                    insertOrUpdate(plantID, p0.result?.value.toString().toInt() + 1)
+                    insertOrUpdate(plantName, p0.result?.value.toString().toInt() + 1)
                 }
             }
         }
 
-        plants.child(plantID).get().addOnCompleteListener(completeListener)
+        plants.child(plantName).get().addOnCompleteListener(completeListener)
     }
 
-    fun decrementPlan(plantID: String)
+    fun decrementPlan(plantName: String)
     {
         val completeListener = object : OnCompleteListener<DataSnapshot> {
             override fun onComplete(p0: Task<DataSnapshot>) {
                 if (p0.isSuccessful)
                 {
-                    insertOrUpdate(plantID, p0.result?.value.toString().toInt() - 1)
+                    insertOrUpdate(plantName, p0.result?.value.toString().toInt() - 1)
                 }
             }
         }
 
-        plants.child(plantID).get().addOnCompleteListener(completeListener)
+        plants.child(plantName).get().addOnCompleteListener(completeListener)
     }
 
     //This is used to create your own onComplete/Failure/Change Listeners
-    fun getChild(plantID: String): DatabaseReference
+    fun getChild(plantName: String): DatabaseReference
     {
-        return plants.child(plantID)
+        return plants.child(plantName)
     }
 
     companion object {
