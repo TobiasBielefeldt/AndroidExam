@@ -25,34 +25,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var context = this;
-        //This should run ones when the app starts and never again (Properly)
 
-
-        //Call singleton to get an instance
-
-
-        //Database stuff should be done in a Coroutine
         GlobalScope.launch{
             val db: AppDatabase = AppDatabase.getAppDatabase(context)!!
-            val personalPlantRepository = PersonalPlantRepository.getInstance()
-            val plantRepository = PlantRepository.getInstance()
-            //Nuketable removes everything from the table
-            //Insert takes a plant in inserts it. Get basic plant just creates a template plant
-            personalPlantRepository.nukeTable()
-            personalPlantRepository.insert(PersonalPlant.getBasicPlant()!!)
-
-            //Write the cout of each database (Should be 1 in each as we first remove everything and then add 1 new)
-            Log.w("Plant Count", "Personal plant count: " + personalPlantRepository.count().toString())
-            Log.w("Plant Count", "Abstract Plant count: " + plantRepository.count().toString())
         }
 
         val firebase = FirebaseRepository.getInstance()
-        //I don't think firebase has to be done in a corotoune since they use listners which wait for stuff to happen
-
-        //Increment or decrement plants with that id
-        //firebase.decrementPlan("fa405ab3-8b31-45ef-a15a-c8d74bfb7h45")
-        //firebase.incrementPlant("fa405ab3-8b31-45ef-a15a-c8d74bfb5b45")
-
         /*
         This creates an even listner that activates when something changes on the database, it runs once before listening aswell
         val valueEventListener = object : ValueEventListener {
@@ -65,12 +43,15 @@ class MainActivity : AppCompatActivity() {
         }
         //Adds the valueEventListner to a plant with the id
         firebase.getChild("fa405ab3-8b31-45ef-aaaa-c8d74bfb7h45").addValueEventListener(valueEventListener)
-
         */
 
         setContentView(R.layout.activity_main)
-        //We start on the home fragment
-        updateFragment(HomeFragment())
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.main_fragment, HomeFragment()) //begin on homefragment
+                .commit()
+        }
 
         val btnHome = findViewById<Button>(R.id.btnHome)
         btnHome.setOnClickListener{updateFragment(HomeFragment())}
