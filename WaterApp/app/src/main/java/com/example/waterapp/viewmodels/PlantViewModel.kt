@@ -12,7 +12,7 @@ import com.example.waterapp.database.Plant
 class PlantViewModel : ViewModel(){
     private lateinit var plants: List<Plant>
     private lateinit var PlantNames: MutableList<String>
-    private var selectedPlant = MutableLiveData<Pair<Int, Plant>>()
+    private var selectedPlant = MutableLiveData<Plant>()
     private val PlantRepository = com.example.waterapp.repositories.PlantRepository
 
     init {
@@ -20,13 +20,18 @@ class PlantViewModel : ViewModel(){
         loadPlantNames()
     }
 
-    fun getSelectedPlant(): LiveData<Pair<Int, Plant>> {
+    fun getSelectedPlant(): LiveData<Plant> {
         return selectedPlant
     }
 
-    fun selectPlantAt(position: Int) {
-        selectedPlant.value = Pair(position, plants[position])
+    fun selectPlantAt(name: String) {
+        for (plant in plants){
+            if (plant.name == name){
+                selectedPlant = MutableLiveData(plant)
+            }
+        }
     }
+
 
     fun getPlantNames(): MutableList<String> {
         return PlantNames
@@ -60,9 +65,5 @@ class PlantViewModel : ViewModel(){
             5 -> ("This level of sun is not possible in Denmark")
             else -> ("It is not yet known how much sun this plant needs")
         }
-    }
-
-    fun getWaterImage(): Int{
-        return R.drawable.water_drop
     }
 }

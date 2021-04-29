@@ -51,10 +51,10 @@ class InformationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         plantViewModel.getSelectedPlant().observe(viewLifecycleOwner) {
-            nameView.text = it.second.name
-            descriptionView.text = it.second.description
-            sunView.text = plantViewModel.getSunDescription(it.second.sunNeed)
-            repeat(it.second.sunNeed) {
+            nameView.text = it.name
+            descriptionView.text = it.description
+            sunView.text = plantViewModel.getSunDescription(it.sunNeed)
+            repeat(it.sunNeed) {
                 var imageView = ImageView(this.requireContext())
                 Glide.with(requireContext())
                         .load(R.drawable.sun)
@@ -63,8 +63,8 @@ class InformationFragment : Fragment() {
                 imageView.layoutParams.height = 100
                 imageView.layoutParams.width = 100
             }
-            waterView.text = plantViewModel.getWaterDescription(it.second.waterNeed)
-            repeat(it.second.waterNeed) {
+            waterView.text = plantViewModel.getWaterDescription(it.waterNeed)
+            repeat(it.waterNeed) {
                 var imageView = ImageView(this.requireContext())
                 Glide.with(requireContext())
                         .load(R.drawable.water_drop)
@@ -73,7 +73,6 @@ class InformationFragment : Fragment() {
                 imageView.layoutParams.height = 100
                 imageView.layoutParams.width = 100
             }
-            mCurrentPosition = it.first
         }
 
 

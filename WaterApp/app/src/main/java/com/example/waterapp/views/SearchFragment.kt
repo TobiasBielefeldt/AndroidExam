@@ -27,7 +27,7 @@ class SearchFragment : Fragment() {
         listView.adapter = adapter
         //Set listener on listView checking if items are clicked
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            plantViewModel.selectPlantAt(position)
+            plantViewModel.selectPlantAt(adapter.getItem(position)!!)
             var fragmentManager = requireActivity().supportFragmentManager
             fragmentManager
                     .beginTransaction()
