@@ -2,24 +2,18 @@ package com.example.waterapp
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.findNavController
+import androidx.fragment.app.Fragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.waterapp.database.AppDatabase
 import com.example.waterapp.database.PersonalPlant
-import com.example.waterapp.database.Plant
 import com.example.waterapp.repositories.FirebaseRepository
 import com.example.waterapp.repositories.PersonalPlantRepository
 import com.example.waterapp.repositories.PlantRepository
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
+import com.example.waterapp.views.HomeFragment
+import com.example.waterapp.views.InformationFragment
+import com.example.waterapp.views.SearchFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -75,33 +69,21 @@ class MainActivity : AppCompatActivity() {
         */
 
         setContentView(R.layout.activity_main)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        //We start on the home fragment
+        updateFragment(HomeFragment())
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.nav_home, R.id.nav_information, R.id.nav_search), drawerLayout)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        val btnHome = findViewById<Button>(R.id.btnHome)
+        btnHome.setOnClickListener{updateFragment(HomeFragment())}
+
+        val btnSearch = findViewById<Button>(R.id.btnSearch)
+        btnSearch.setOnClickListener{updateFragment(SearchFragment())}
+
     }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    private fun updateFragment(currentFragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.main_fragment, currentFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
