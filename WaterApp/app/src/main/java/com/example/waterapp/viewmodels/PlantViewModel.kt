@@ -14,6 +14,7 @@ class PlantViewModel : ViewModel(){
     private lateinit var PlantNames: MutableList<String>
     private var selectedPlant:  MutableLiveData<Plant> = MutableLiveData()
     private val PlantRepository = com.example.waterapp.repositories.PlantRepository
+    private var plantIsSet: Boolean = false;
 
     init {
         loadPlants()
@@ -24,10 +25,19 @@ class PlantViewModel : ViewModel(){
         return selectedPlant
     }
 
-    fun selectPlantAt(name: String) {
-        selectedPlant = MutableLiveData(PlantRepository.getInstance().getPlantFromName(name)!!)
+    fun getPlantIsSet(): Boolean{
+        return plantIsSet
     }
 
+    fun selectPlant(name: String) {
+        selectedPlant.value = PlantRepository.getInstance().getPlantFromName(name)!!
+        plantIsSet = true
+
+    }
+
+    fun deselectPlant(){
+        plantIsSet = false
+    }
 
     fun getPlantNames(): MutableList<String> {
         return PlantNames

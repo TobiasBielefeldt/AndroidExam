@@ -1,26 +1,29 @@
 package com.example.waterapp
 
+import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.ui.AppBarConfiguration
+import androidx.lifecycle.ViewModelProvider
 import com.example.waterapp.database.AppDatabase
-import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.repositories.FirebaseRepository
-import com.example.waterapp.repositories.PersonalPlantRepository
-import com.example.waterapp.repositories.PlantRepository
+import com.example.waterapp.viewmodels.PlantViewModel
 import com.example.waterapp.views.HomeFragment
-import com.example.waterapp.views.InformationFragment
 import com.example.waterapp.views.SearchFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var plantViewModel: PlantViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +63,15 @@ class MainActivity : AppCompatActivity() {
         val btnSearch = findViewById<Button>(R.id.btnSearch)
         btnSearch.setOnClickListener{updateFragment(SearchFragment())}
 
+        plantViewModel = ViewModelProvider(this).get(PlantViewModel::class.java)
+        val btnNew = findViewById<Button>(R.id.btnNew)
+        btnNew.setOnClickListener{
+            if(!plantViewModel.getPlantIsSet()) {
+                    updateFragment(SearchFragment())
+            } else {
+                addNewPlant()
+            }
+        }
     }
     private fun updateFragment(currentFragment: Fragment) {
         supportFragmentManager
@@ -68,4 +80,30 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
     }
+
+    private fun addNewPlant() {
+        val builder = AlertDialog.Builder(this)
+        val alertDialog = AlertDialog.Builder(this).create()
+        val inflater = layoutInflater
+        val plantName = plantViewModel.getSelectedPlant().value!!.name
+        builder.setTitle("Adding $plantName")
+
+        val dialogLayout = inflater.inflate(R.layout.add_new_plant, null)
+        val editText  = dialogLayout.findViewById<EditText>(R.id.personalName)
+
+        builder.setView(dialogLayout)
+
+        builder.setPositiveButton("Add $plantName") { _,_ ->
+            Toast.makeText(applicationContext,
+                    "$plantName added ", Toast.LENGTH_SHORT).show()}
+
+        builder.setNegativeButton("Cancel") { _,_ ->
+            Toast.makeText(applicationContext,
+                    "Action was Cancelled", Toast.LENGTH_SHORT).show()
+        }
+
+        builder.show()
+
+    }
+
 }
