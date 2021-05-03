@@ -13,6 +13,11 @@ class PersonalPlantRepository(private val personalPlantDao: PersonalPlantDao) {
         return personalPlantDao.getAllPersonalPlants()
     }
 
+    //Gets a list of all personalplants in the database
+    fun getAllPlantsOfSameType(type: String): List<PersonalPlant>{
+        return personalPlantDao.getAllPersonalPlantsOfSameType(type)
+    }
+
     //Inserts the personalplant
     fun insert(personalPlant: PersonalPlant)
     {

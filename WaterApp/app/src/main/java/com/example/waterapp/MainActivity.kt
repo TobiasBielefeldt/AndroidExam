@@ -1,29 +1,28 @@
 package com.example.waterapp
 
-import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.waterapp.database.AppDatabase
 import com.example.waterapp.repositories.FirebaseRepository
+import com.example.waterapp.repositories.PersonalPlantRepository
+import com.example.waterapp.viewmodels.AddNewViewModel
 import com.example.waterapp.viewmodels.PlantViewModel
 import com.example.waterapp.views.HomeFragment
 import com.example.waterapp.views.SearchFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var plantViewModel: PlantViewModel
+    private lateinit var newViewModel: AddNewViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +85,8 @@ class MainActivity : AppCompatActivity() {
         val alertDialog = AlertDialog.Builder(this).create()
         val inflater = layoutInflater
         val plantName = plantViewModel.getSelectedPlant().value!!.name
+        lateinit var potGroup: RadioGroup
+        lateinit var plantGroup: RadioGroup
         builder.setTitle("Adding $plantName")
 
         val dialogLayout = inflater.inflate(R.layout.add_new_plant, null)
@@ -93,17 +94,38 @@ class MainActivity : AppCompatActivity() {
 
         builder.setView(dialogLayout)
 
-        builder.setPositiveButton("Add $plantName") { _,_ ->
-            Toast.makeText(applicationContext,
-                    "$plantName added ", Toast.LENGTH_SHORT).show()}
+        potGroup = dialogLayout.findViewById(R.id.potGroup)
+        plantGroup = dialogLayout.findViewById(R.id.plantGroup)
+        newViewModel = ViewModelProvider(this).get(AddNewViewModel::class.java)
 
-        builder.setNegativeButton("Cancel") { _,_ ->
+        potGroup.setOnCheckedChangeListener { potGroup, id ->
+            val rb = potGroup.findViewById(id) as RadioButton
+            newViewModel.setPotSize(rb.text.toString())
+        }
+
+        plantGroup.setOnCheckedChangeListener { plantGroup, id ->
+            val rb = plantGroup.findViewById(id) as RadioButton
+            newViewModel.setPlantSize(rb.text.toString())
+        }
+
+        builder.setPositiveButton("Add $plantName") { _, _ ->
+            //check if the EditText have values or not
+            if(editText.text.toString().trim().isNotEmpty()) {
+                newViewModel.setName(editText.text.toString(), plantName)
+            }else{
+                newViewModel.setDefaultName(plantName)
+            }
+            GlobalScope.launch{
+                newViewModel.createNewPersonalPlant()
+                Log.w("Plants", PersonalPlantRepository.getInstance().getAllPlants().toString())
+            }
+            Toast.makeText(applicationContext,
+                    "${newViewModel.getName()} added ", Toast.LENGTH_SHORT).show()
+            }
+        builder.setNegativeButton("Cancel") { _, _ ->
             Toast.makeText(applicationContext,
                     "Action was Cancelled", Toast.LENGTH_SHORT).show()
         }
-
         builder.show()
-
     }
-
 }

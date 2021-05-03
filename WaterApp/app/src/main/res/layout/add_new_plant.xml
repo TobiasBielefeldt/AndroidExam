@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Space
         android:layout_width="match_parent"
@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textSize="18sp"
-        android:text="@string/intro_text" />
+        android:text="@string/intro_text"
+        android:textSize="18sp" />
 
     <Space
         android:layout_width="match_parent"
@@ -38,31 +38,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/pot_text"/>
+        android:text="@string/pot_text" />
 
     <RadioGroup
+        android:id="@+id/potGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
-        >
-        <RadioButton
-            android:id="@+id/pot_size_large"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/large" />
-
-        <RadioButton
-            android:id="@+id/pot_size_medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/medium" />
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/pot_size_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/small" />
+
+        <RadioButton
+            android:id="@+id/pot_size_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/medium" />
+
+        <RadioButton
+            android:id="@+id/pot_size_large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/large" />
 
     </RadioGroup>
 
@@ -78,10 +80,11 @@
         android:text="@string/plant_text" />
 
     <RadioGroup
+        android:id="@+id/plantGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/plant_size_small"
@@ -93,6 +96,7 @@
             android:id="@+id/plant_size_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="@string/medium" />
 
         <RadioButton
