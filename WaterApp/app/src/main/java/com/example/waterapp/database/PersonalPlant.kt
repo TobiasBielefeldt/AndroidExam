@@ -16,7 +16,7 @@ class PersonalPlant {
 
     @JvmField
     @NonNull
-    var uid: String? = null
+    var plantType: String? = null
 
     @JvmField
     var personalName: String? = null
@@ -36,7 +36,7 @@ class PersonalPlant {
         {
             val plant = PersonalPlant()
             plant.personalPlantID = UUID.randomUUID().toString()
-            plant.uid = UUID.randomUUID().toString()
+            plant.plantType = "Croton"
             plant.personalName = "test"
             plant.plantSize = 2
             plant.potSize = 3

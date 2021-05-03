@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.waterapp.MainActivity
 import com.example.waterapp.R
 import com.example.waterapp.viewmodels.PlantViewModel
 
@@ -27,7 +26,7 @@ class SearchFragment : Fragment() {
         listView.adapter = adapter
         //Set listener on listView checking if items are clicked
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            plantViewModel.selectPlantAt(adapter.getItem(position)!!)
+            plantViewModel.selectPlant(adapter.getItem(position)!!)
             var fragmentManager = requireActivity().supportFragmentManager
             fragmentManager
                     .beginTransaction()

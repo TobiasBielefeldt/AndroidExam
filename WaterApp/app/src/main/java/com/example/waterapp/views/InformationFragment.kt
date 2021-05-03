@@ -44,10 +44,13 @@ class InformationFragment : Fragment() {
         return root
     }
 
+    override fun onPause() {
+        super.onPause()
+        plantViewModel.deselectPlant()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
 
         plantViewModel.getSelectedPlant().observe(viewLifecycleOwner) {
             Glide.with(requireContext())
@@ -79,7 +82,6 @@ class InformationFragment : Fragment() {
                 imageView.layoutParams.width = 100
             }
         }
-
 
     }
 }

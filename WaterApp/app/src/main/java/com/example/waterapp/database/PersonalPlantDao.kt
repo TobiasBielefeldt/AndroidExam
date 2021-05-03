@@ -11,6 +11,9 @@ interface PersonalPlantDao {
     @Query("SELECT * FROM personalPlant")
     fun getAllPersonalPlants(): List<PersonalPlant>
 
+    @Query("SELECT * FROM personalPlant WHERE plantType = :type")
+    fun getAllPersonalPlantsOfSameType(type: String): List<PersonalPlant>
+
     @Update
     fun update(personalPlant: PersonalPlant): Int
 

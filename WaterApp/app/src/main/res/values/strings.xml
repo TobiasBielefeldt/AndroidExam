@@ -17,4 +17,16 @@
     <string name="homeButton">Home</string>
     <string name="searchButton">Search</string>
     <string name="add_new_plant">add new plant</string>
+    <string name="home_btn">Home</string>
+    <string name="search_btn">Search</string>
+    <string name="add_new_plant_btn">Add new plant</string>
+    <string name="textview">text</string>
+
+    <string name="plant_name">Personal name for your plant</string>
+    <string name="intro_text">Customize your plant or simply add it</string>
+    <string name="small">Small</string>
+    <string name="medium">Medium</string>
+    <string name="large">Large</string>
+    <string name="pot_text">Pot size</string>
+    <string name="plant_text">Plant size</string>
 </resources>
