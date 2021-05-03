@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:gravity="center_horizontal"
-            android:textSize="36sp" />
+            android:textSize="70sp" />
 
         <TextView
             android:id="@+id/plantDescription"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:gravity="center_horizontal"
-            android:textSize="16sp" />
+            android:textSize="32sp" />
 
         <Space
             android:layout_width="match_parent"
@@ -67,7 +67,7 @@
             android:id="@+id/waterNeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"/>
+            android:textSize="32sp"/>
 
         <LinearLayout
             android:id="@+id/sunIcons"
@@ -79,7 +79,7 @@
             android:id="@+id/sunNeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp" />
+            android:textSize="32sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
