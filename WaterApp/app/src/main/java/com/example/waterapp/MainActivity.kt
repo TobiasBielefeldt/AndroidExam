@@ -109,13 +109,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         builder.setPositiveButton("Add $plantName") { _, _ ->
-            //check if the EditText have values or not
+
+            GlobalScope.launch{
+                //check if the EditText have values or not
             if(editText.text.toString().trim().isNotEmpty()) {
                 newViewModel.setName(editText.text.toString(), plantName)
             }else{
                 newViewModel.setDefaultName(plantName)
             }
-            GlobalScope.launch{
                 newViewModel.createNewPersonalPlant()
                 Log.w("Plants", PersonalPlantRepository.getInstance().getAllPlants().toString())
             }
