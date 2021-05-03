@@ -12,7 +12,6 @@ class PlantRepository()
         insert(Plant.createNewPlant("Cactus", "Cacti are some of the most unusual and elegant plants in the world, with bold shapes of all kinds and beautiful green colour variations." , 5,2))
     }
 
-
     //This Repository works the same way as the PersonalPlantRepository so look at that if you need help
     fun getAllPlants(): List<Plant>{
         return plantDatabase

@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.helper.ImageHelper
+import com.example.waterapp.helper.TimeHelper
 import com.example.waterapp.views.HomeFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.currentCoroutineContext
@@ -56,7 +57,7 @@ class PlantAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val plant = plantList[position]
         holder.plantName.text = plant.personalName
-        holder.waterTime.text = "03:04:50"
+        holder.waterTime.text = TimeHelper.getTimeToWater(plant)
 
         // add plant images with Glide
         Glide.with(holder.itemView)

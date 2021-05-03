@@ -55,7 +55,7 @@ class AddNewViewModel : ViewModel() {
         plant.personalName = personalName
         plant.plantSize = plantSize
         plant.potSize = potSize
-        plant.lastWatered = System.currentTimeMillis().toInt()
+        plant.lastWatered = System.currentTimeMillis()
         plant.plantType = plantType
         plant.personalPlantID = UUID.randomUUID().toString()
         repository.insert(plant)
