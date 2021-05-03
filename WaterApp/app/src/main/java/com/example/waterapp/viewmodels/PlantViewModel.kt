@@ -51,14 +51,14 @@ class PlantViewModel : ViewModel(){
         plants = PlantRepository.getInstance().getAllPlants()
     }
 
-    fun getWaterDescription(waterNeed: Int): String{
+    fun transformWaterNeed(waterNeed: Int): Pair<Int, String>{
         return when(waterNeed) {
-            1 -> ("Should be watered every other month")
-            2 -> ("Should be watered once month")
-            3 -> ("Should be watered every other week")
-            4 -> ("Should be watered once a week")
-            5 -> ("Should be watered twice a week")
-            else -> ("It is not yet known how much water this plant needs")
+            in 1..4 -> (Pair(5, "This plant should be watered twice a week"))
+            in 5..9 -> (Pair(4, "This plant should be watered once a week"))
+            in 10..14 -> (Pair(3, "This plant should be watered every other week"))
+            in 15..21 -> (Pair(2, "This plant should be watered twice a month"))
+            in 22..30 -> (Pair(1, "This plant should be watered once a month"))
+            else -> (Pair(5, "Something went wrong"))
         }
     }
 

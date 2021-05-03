@@ -94,8 +94,9 @@ class InformationFragment : Fragment() {
                 imageView.layoutParams.height = 100
                 imageView.layoutParams.width = 100
             }
-            waterView.text = plantViewModel.getWaterDescription(it.waterNeed)
-            repeat(it.waterNeed) {
+           val waterPair: Pair<Int, String> = plantViewModel.transformWaterNeed(it.waterNeed)
+            waterView.text = waterPair.second
+            repeat(waterPair.first) {
                 var imageView = ImageView(this.requireContext())
                 Glide.with(requireContext())
                         .load(R.drawable.water_drop)
