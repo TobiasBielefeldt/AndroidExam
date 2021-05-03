@@ -8,28 +8,23 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterapp.R
-import com.example.waterapp.models.ImageAdapter
+import com.example.waterapp.database.PersonalPlant
+import com.example.waterapp.models.PlantAdapter
+import com.example.waterapp.repositories.PersonalPlantRepository
 import com.example.waterapp.viewmodels.HomeViewModel
 import com.example.waterapp.viewmodels.TipViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by activityViewModels()
-    private var mCurrentPosition = -1
     private lateinit var root: ConstraintLayout
-    private lateinit var textView: TextView
-    private lateinit var textView2: TextView
-
-    //image handler
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAdapter: RecyclerView.Adapter<*>
-    private lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private lateinit var personalPlantList: List<PersonalPlant>
 
     //Tip of the Day
     private val tipViewModel: TipViewModel by activityViewModels()
@@ -41,14 +36,18 @@ class HomeFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         root = inflater.inflate(R.layout.home_fragment, container, false) as ConstraintLayout
-        textView = root.findViewById(R.id.textViewTest)
 
-        mRecyclerView = root.findViewById(R.id.my_recycler_view)
-        mRecyclerView.setHasFixedSize(true)
-        mLayoutManager = GridLayoutManager(this.context, 1)
-        mRecyclerView.layoutManager = mLayoutManager
-        mAdapter = ImageAdapter(this.requireContext())
-        mRecyclerView.adapter = mAdapter
+        GlobalScope.launch {
+            // Initialize data. Getting the personal plants from database
+            personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
+            // Adding them to recyclerView
+            val recyclerView = root.findViewById<RecyclerView>(R.id.plantRecyclerView)
+            recyclerView.adapter = PlantAdapter(this, personalPlantList)
+
+            // Use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            recyclerView.setHasFixedSize(true)
+        }
 
         //Tip of the day
         tipView = root.findViewById(R.id.tipView)
@@ -69,5 +68,4 @@ class HomeFragment : Fragment() {
         nextTip.setOnClickListener { tipViewModel.randomTip() }
 
     }
-
 }
