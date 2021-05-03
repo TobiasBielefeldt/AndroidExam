@@ -21,7 +21,6 @@ class ImageHelper {
                 }
             }
 
-
             return returnValue
         }
     }

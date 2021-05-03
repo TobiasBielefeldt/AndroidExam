@@ -28,7 +28,7 @@ class PersonalPlant {
     var potSize: Int = 0
 
     @JvmField
-    var lastWatered: Int = 0
+    var lastWatered: Long = 0
 
     companion object {
 
