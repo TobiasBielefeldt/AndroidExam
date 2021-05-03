@@ -29,24 +29,8 @@ class MainActivity : AppCompatActivity() {
         var context = this;
 
         GlobalScope.launch{
-            val db: AppDatabase = AppDatabase.getAppDatabase(context)!!
+            AppDatabase.getAppDatabase(context)!!
         }
-
-        val firebase = FirebaseRepository.getInstance()
-
-        /*
-        This creates an even listner that activates when something changes on the database, it runs once before listening aswell
-        val valueEventListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                //Write code here (This prints as an example)
-                val value = snapshot.value
-                Log.w("DataChange", value.toString())
-            }
-            override fun onCancelled(error: DatabaseError) { }
-        }
-        //Adds the valueEventListner to a plant with the id
-        firebase.getChild("fa405ab3-8b31-45ef-aaaa-c8d74bfb7h45").addValueEventListener(valueEventListener)
-        */
 
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
@@ -88,6 +72,8 @@ class MainActivity : AppCompatActivity() {
         lateinit var potGroup: RadioGroup
         lateinit var plantGroup: RadioGroup
         builder.setTitle("Adding $plantName")
+        val firebase = FirebaseRepository.getInstance()
+
 
         val dialogLayout = inflater.inflate(R.layout.add_new_plant, null)
         val editText  = dialogLayout.findViewById<EditText>(R.id.personalName)
@@ -117,7 +103,9 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     newViewModel.setDefaultName(plantName)
                 }
+                firebase.incrementPlant(plantName)
                 newViewModel.createNewPersonalPlant()
+
             }
             Toast.makeText(applicationContext,
                     "$plantName added ", Toast.LENGTH_SHORT).show()
