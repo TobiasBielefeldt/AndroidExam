@@ -1,5 +1,6 @@
 package com.example.waterapp.views
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.waterapp.R
 import com.example.waterapp.helper.ImageHelper
+import com.example.waterapp.repositories.FirebaseRepository
 import com.example.waterapp.viewmodels.PlantViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 class InformationFragment : Fragment() {
 
@@ -24,6 +29,7 @@ class InformationFragment : Fragment() {
     private lateinit var descriptionView: TextView
     private lateinit var sunView: TextView
     private lateinit var waterView: TextView
+    private lateinit var userView: TextView
     private lateinit var waterIcons: LinearLayout
     private lateinit var sunIcons: LinearLayout
 
@@ -40,6 +46,7 @@ class InformationFragment : Fragment() {
         sunIcons = root.findViewById(R.id.sunIcons)
         waterView = root.findViewById(R.id.waterNeed)
         waterIcons = root.findViewById(R.id.waterIcons)
+        userView = root.findViewById(R.id.userScore)
 
         return root
     }
@@ -51,6 +58,20 @@ class InformationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val firebase = FirebaseRepository.getInstance()
+        val valueEventListener = object : ValueEventListener {
+            @SuppressLint("SetTextI18n")
+            override fun onDataChange(snapshot: DataSnapshot) {
+                //Write code here (This prints as an example)
+                userView.text = resources.getString(R.string.databaseSucces) + " " + snapshot.value.toString()
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+                userView.text = resources.getString(R.string.databaseError)
+            }
+        }
+        //Adds the valueEventListner to a plant with the id
+        firebase.getChild(plantViewModel.getSelectedPlant().value!!.name).addValueEventListener(valueEventListener)
 
         plantViewModel.getSelectedPlant().observe(viewLifecycleOwner) {
             Glide.with(requireContext())
@@ -60,6 +81,8 @@ class InformationFragment : Fragment() {
                     .apply(RequestOptions().circleCrop())
                     .into(imageView)
             nameView.text = it.name
+
+
             descriptionView.text = it.description
             sunView.text = plantViewModel.getSunDescription(it.sunNeed)
             repeat(it.sunNeed) {
