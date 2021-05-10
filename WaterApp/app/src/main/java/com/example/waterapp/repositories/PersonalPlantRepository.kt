@@ -44,9 +44,9 @@ class PersonalPlantRepository(private val personalPlantDao: PersonalPlantDao) {
         personalPlantDao.delete(personalPlant)
     }
 
-    //Takes an id an returns the personalplant
-    fun getPersonalPlantFromID(personalPlantID: String): PersonalPlant{
-        return personalPlantDao.getPersonalPlantFromID(personalPlantID)
+    //Takes a personalName an returns the personalplant
+    fun getPersonalPlantFromPersonalName(personalPlantName: String): PersonalPlant{
+        return personalPlantDao.getPersonalPlantFromPersonalName(personalPlantName)
     }
 
     companion object {

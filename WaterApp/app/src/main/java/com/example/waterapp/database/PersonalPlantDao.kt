@@ -17,8 +17,8 @@ interface PersonalPlantDao {
     @Insert
     fun insert(personalPlant: PersonalPlant)
 
-    @Query("SELECT * FROM personalPlant WHERE personalPlantID = :id")
-    fun getPersonalPlantFromID(id : String): PersonalPlant
+    @Query("SELECT * FROM personalPlant WHERE personalName = :name")
+    fun getPersonalPlantFromPersonalName(name : String): PersonalPlant
 
     @Query("SELECT COUNT(*) FROM personalPlant")
     fun countPlants(): Int

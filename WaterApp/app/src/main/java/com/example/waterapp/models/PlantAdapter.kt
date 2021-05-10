@@ -6,12 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.waterapp.R
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.waterapp.database.PersonalPlant
@@ -19,14 +15,11 @@ import com.example.waterapp.helper.ImageHelper
 import com.example.waterapp.helper.TimeHelper
 import com.example.waterapp.views.HomeFragment
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.currentCoroutineContext
-import kotlin.coroutines.coroutineContext
 
 /**
  * Adapter for the [RecyclerView] in [HomeFragment]. Displays [Affirmation] data object.
  */
 class PlantAdapter(
-        private val context: CoroutineScope,
         private val plantList: List<PersonalPlant>
 ) : RecyclerView.Adapter<PlantAdapter.ItemViewHolder>() {
 
@@ -75,10 +68,17 @@ class PlantAdapter(
                 .load(R.drawable.watering_can)
                 .apply(RequestOptions().override(100, 100))
                 .into(holder.btnWater)
+
     }
 
     /**
      * Return the size of your dataset (invoked by the layout manager)
      */
     override fun getItemCount() = plantList.size
+
+    fun removeAt(position: Int) {
+        plantList.drop(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, plantList.size)
+    }
 }

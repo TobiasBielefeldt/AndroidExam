@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
@@ -15,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.waterapp.R
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.models.PlantAdapter
+import com.example.waterapp.repositories.FirebaseRepository
 import com.example.waterapp.repositories.PersonalPlantRepository
 import com.example.waterapp.viewmodels.HomeViewModel
 import com.example.waterapp.viewmodels.TipViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -37,6 +36,7 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var btnDelete: Button
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,11 +48,9 @@ class HomeFragment : Fragment() {
             // Initialize data. Getting the personal plants from database
             personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
             // Adding them to recyclerView
-            recyclerView.adapter = PlantAdapter(this, personalPlantList)
+            recyclerView.adapter = PlantAdapter(personalPlantList)
 
-            // Use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            recyclerView.setHasFixedSize(true)
+            recyclerView.setHasFixedSize(false)
         }
 
         //Delete Button
@@ -101,18 +99,28 @@ class HomeFragment : Fragment() {
         }
 
         var personalPlantRepository = PersonalPlantRepository.getInstance()
+        var firebaseRepository = FirebaseRepository.getInstance()
 
         builder.setPositiveButton("Delete") { dialogInterface, i ->
             val selectedStrings = ArrayList<String?>()
 
             for (j in selectedList.indices) {
                 selectedStrings.add(items[selectedList[j]])
-                //personalPlantRepository.delete()
             }
 
+            for(personalName in selectedStrings)
+            {
+                GlobalScope.launch {
+                    var personalPlant = personalPlantRepository.getPersonalPlantFromPersonalName(personalName!!)
+                    firebaseRepository.decrementPlan(personalPlant.plantType!!)
+                    personalPlantRepository.delete(personalPlant)
+                }
 
-            Toast.makeText(context, "Items selected are: " + selectedStrings.toTypedArray()
+            }
+
+            Toast.makeText(context, "Plants deleted: " + selectedStrings.toTypedArray()
                 .contentToString(), Toast.LENGTH_SHORT).show()
+
         }
 
         builder.setNegativeButton("Cancel") { _, _ ->
