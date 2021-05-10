@@ -2,6 +2,7 @@ package com.example.waterapp.views
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,7 +82,7 @@ class HomeFragment : Fragment() {
     private fun delete(){
         val plantNames = ArrayList<String?>()
         //val plantNames = Array(recyclerView.adapter!!.itemCount) { i -> i * 1 }
-        for(i in 0 until recyclerView.adapter!!.itemCount){
+        for(i in 0 until personalPlantList.count()){
             val plantName: String? = personalPlantList[i].personalName
             plantNames.add(plantName)
         }
@@ -107,6 +108,12 @@ class HomeFragment : Fragment() {
 
             for (j in selectedList.indices) {
                 selectedStrings.add(items[selectedList[j]])
+
+                var index = items.indexOfFirst { it==items[selectedList[j]]}
+
+                recyclerView.adapter!!.notifyItemRemoved(index)
+                recyclerView.adapter!!.notifyDataSetChanged()
+
             }
 
             for(personalName in selectedStrings)
@@ -115,9 +122,10 @@ class HomeFragment : Fragment() {
                     var personalPlant = personalPlantRepository.getPersonalPlantFromPersonalName(personalName!!)
                     firebaseRepository.decrementPlan(personalPlant.plantType!!)
                     personalPlantRepository.delete(personalPlant)
+                    personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
                 }
-
             }
+
 
             Toast.makeText(context, "Plants deleted: " + selectedStrings.toTypedArray()
                 .contentToString(), Toast.LENGTH_SHORT).show()

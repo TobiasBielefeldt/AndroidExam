@@ -25,9 +25,7 @@ import kotlin.coroutines.coroutineContext
 /**
  * Adapter for the [RecyclerView] in [HomeFragment]. Displays [Affirmation] data object.
  */
-class PlantAdapter(
-        private val plantList: List<PersonalPlant>
-) : RecyclerView.Adapter<PlantAdapter.ItemViewHolder>() {
+class PlantAdapter(private val plantList: List<PersonalPlant>) : RecyclerView.Adapter<PlantAdapter.ItemViewHolder>() {
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
