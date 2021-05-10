@@ -100,12 +100,16 @@ class HomeFragment : Fragment() {
             }
         }
 
+        var personalPlantRepository = PersonalPlantRepository.getInstance()
+
         builder.setPositiveButton("Delete") { dialogInterface, i ->
             val selectedStrings = ArrayList<String?>()
 
             for (j in selectedList.indices) {
                 selectedStrings.add(items[selectedList[j]])
+                //personalPlantRepository.delete()
             }
+
 
             Toast.makeText(context, "Items selected are: " + selectedStrings.toTypedArray()
                 .contentToString(), Toast.LENGTH_SHORT).show()

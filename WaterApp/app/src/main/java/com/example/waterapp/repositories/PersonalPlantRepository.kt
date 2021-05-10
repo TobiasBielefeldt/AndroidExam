@@ -39,6 +39,11 @@ class PersonalPlantRepository(private val personalPlantDao: PersonalPlantDao) {
         personalPlantDao.nukeTable()
     }
 
+    fun delete(personalPlant: PersonalPlant)
+    {
+        personalPlantDao.delete(personalPlant)
+    }
+
     //Takes an id an returns the personalplant
     fun getPersonalPlantFromID(personalPlantID: String): PersonalPlant{
         return personalPlantDao.getPersonalPlantFromID(personalPlantID)
