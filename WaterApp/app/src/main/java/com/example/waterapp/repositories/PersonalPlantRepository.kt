@@ -49,15 +49,6 @@ class PersonalPlantRepository(private val personalPlantDao: PersonalPlantDao) {
         return personalPlantDao.getPersonalPlantFromPersonalName(personalPlantName)
     }
 
-    fun checkPersonalName(name: String): Boolean{
-        for(plant in getAllPlants()){
-            if (plant.personalName == name){
-                return false
-            }
-        }
-        return true
-    }
-
     companion object {
         // Singleton to prevent multiple instances from existing (It's also just really cool imo)
         private var INSTANCE: PersonalPlantRepository? = null

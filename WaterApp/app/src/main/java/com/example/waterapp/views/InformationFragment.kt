@@ -15,8 +15,10 @@ import androidx.lifecycle.observe
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.waterapp.R
+import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.helper.ImageHelper
 import com.example.waterapp.repositories.FirebaseRepository
+import com.example.waterapp.repositories.PersonalPlantRepository
 import com.example.waterapp.viewmodels.AddNewViewModel
 import com.example.waterapp.viewmodels.PlantViewModel
 import com.google.firebase.database.DataSnapshot
@@ -37,11 +39,17 @@ class InformationFragment : Fragment() {
     private lateinit var userView: TextView
     private lateinit var waterIcons: LinearLayout
     private lateinit var sunIcons: LinearLayout
+    private lateinit var editText: EditText
     private lateinit var newViewModel: AddNewViewModel
+    private lateinit var plantName: String
+    private lateinit var plantType: String
+    private lateinit var personalPlantList: List<PersonalPlant>
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
         root = inflater.inflate(R.layout.information_fragment, container, false) as ConstraintLayout
 
@@ -70,23 +78,29 @@ class InformationFragment : Fragment() {
             @SuppressLint("SetTextI18n")
             override fun onDataChange(snapshot: DataSnapshot) {
                 //Write code here (This prints as an example)
-                userView.text = resources.getString(R.string.databaseSucces) + " " + snapshot.value.toString()
-
+                userView.text =
+                    resources.getString(R.string.databaseSucces) + " " + snapshot.value.toString()
             }
+
             override fun onCancelled(error: DatabaseError) {
                 userView.text = resources.getString(R.string.databaseError)
             }
         }
         //Adds the valueEventListner to a plant with the id
-        firebase.getChild(plantViewModel.getSelectedPlant().value!!.name).addValueEventListener(valueEventListener)
+        firebase.getChild(plantViewModel.getSelectedPlant().value!!.name)
+            .addValueEventListener(valueEventListener)
+
+        GlobalScope.launch {
+            personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
+        }
 
         plantViewModel.getSelectedPlant().observe(viewLifecycleOwner) {
             Glide.with(requireContext())
-                    .clear(imageView)
+                .clear(imageView)
             Glide.with(requireContext())
-                    .load(ImageHelper.getImage(it.name))
-                    .apply(RequestOptions().circleCrop())
-                    .into(imageView)
+                .load(ImageHelper.getImage(it.name))
+                .apply(RequestOptions().circleCrop())
+                .into(imageView)
             nameView.text = it.name
 
 
@@ -95,19 +109,19 @@ class InformationFragment : Fragment() {
             repeat(it.sunNeed) {
                 var imageView = ImageView(this.requireContext())
                 Glide.with(requireContext())
-                        .load(R.drawable.sun)
-                        .into(imageView)
+                    .load(R.drawable.sun)
+                    .into(imageView)
                 sunIcons.addView(imageView)
                 imageView.layoutParams.height = 100
                 imageView.layoutParams.width = 100
             }
-           val waterPair: Pair<Int, String> = plantViewModel.transformWaterNeed(it.waterNeed)
+            val waterPair: Pair<Int, String> = plantViewModel.transformWaterNeed(it.waterNeed)
             waterView.text = waterPair.second
             repeat(waterPair.first) {
                 var imageView = ImageView(this.requireContext())
                 Glide.with(requireContext())
-                        .load(R.drawable.water_drop)
-                        .into(imageView)
+                    .load(R.drawable.water_drop)
+                    .into(imageView)
                 waterIcons.addView(imageView)
                 imageView.layoutParams.height = 100
                 imageView.layoutParams.width = 100
@@ -115,8 +129,8 @@ class InformationFragment : Fragment() {
         }
 
         val btnNew = root.findViewById<Button>(R.id.btnNew)
-        btnNew.setOnClickListener{
-            if(plantViewModel.getPlantIsSet()) {
+        btnNew.setOnClickListener {
+            if (plantViewModel.getPlantIsSet()) {
                 addNewPlant()
             }
         }
@@ -124,20 +138,19 @@ class InformationFragment : Fragment() {
 
     }
 
+
     private fun addNewPlant() {
-        val builder = context?.let { AlertDialog.Builder(it) }
-        val alertDialog = context?.let { AlertDialog.Builder(it).create() }
+        val builder = AlertDialog.Builder(requireContext())
         val inflater = layoutInflater
-        val plantName = plantViewModel.getSelectedPlant().value!!.name
+        plantType = plantViewModel.getSelectedPlant().value!!.name
+        plantName = plantType
         lateinit var potGroup: RadioGroup
         lateinit var plantGroup: RadioGroup
-        builder!!.setTitle("Adding $plantName")
+        builder.setTitle("Adding $plantType")
         val firebase = FirebaseRepository.getInstance()
 
-
         val dialogLayout = inflater.inflate(R.layout.add_new_plant, null)
-        val editText  = dialogLayout.findViewById<EditText>(R.id.personalName)
-
+        editText = dialogLayout.findViewById(R.id.personalName)
         builder.setView(dialogLayout)
 
         potGroup = dialogLayout.findViewById(R.id.potGroup)
@@ -154,28 +167,36 @@ class InformationFragment : Fragment() {
             newViewModel.setPlantSize(rb.text.toString())
         }
 
-        builder.setPositiveButton("Add $plantName") { _, _ ->
-
-            GlobalScope.launch {
-                //check if the EditText have values or not
-                if (editText.text.toString().trim().isNotEmpty()) {
-                    newViewModel.setName(editText.text.toString(), plantName)
-                } else {
-                    newViewModel.setDefaultName(plantName)
+        builder.setPositiveButton("Add $plantType") { _, _ ->
+            if(editText.text.toString().trim().isEmpty()){
+                var count = 0
+                for (plant in personalPlantList) {
+                    if (plant.plantType == plantType) {
+                        count++
+                    }
                 }
-                firebase.incrementPlant(plantName)
-                newViewModel.createNewPersonalPlant()
-
+                plantName += count
+            } else {
+                plantName = editText.text.toString()
+                for (plant in personalPlantList) {
+                    while(plant.personalName == plantName){
+                        plantName = "New $plantName"
+                    }
+                }
             }
-            Toast.makeText(root.context,
-                    "$plantName added ", Toast.LENGTH_SHORT).show()
+            newViewModel.setName(plantName, plantType)
+            GlobalScope.launch {
+                firebase.incrementPlant(plantType)
+                newViewModel.createNewPersonalPlant()
+            }
+
+            Toast.makeText(context, "$plantName added ", Toast.LENGTH_SHORT).show()
         }
+
         builder.setNegativeButton("Cancel") { _, _ ->
-            Toast.makeText(root.context,
-                    "Action was Cancelled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Action was Cancelled", Toast.LENGTH_SHORT).show()
         }
+
         builder.show()
+        }
     }
-
-
-}

@@ -2,33 +2,22 @@ package com.example.waterapp
 
 import android.os.Bundle
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.waterapp.database.AppDatabase
 import com.example.waterapp.database.PersonalPlant
-import com.example.waterapp.repositories.FirebaseRepository
 import com.example.waterapp.repositories.PersonalPlantRepository
-import com.example.waterapp.repositories.PlantRepository
-import com.example.waterapp.viewmodels.AddNewViewModel
 import com.example.waterapp.viewmodels.PlantViewModel
 import com.example.waterapp.views.HomeFragment
 import com.example.waterapp.views.SearchFragment
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
-
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var plantViewModel: PlantViewModel
-    private lateinit var newViewModel: AddNewViewModel
     private lateinit var personalPlantsList: List<PersonalPlant>
-    private lateinit var editText: EditText
-    private lateinit var plantName: String
-    private lateinit var plantType: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
