@@ -52,88 +52,14 @@ class MainActivity : AppCompatActivity() {
         btnHome.setOnClickListener { updateFragment(HomeFragment()) }
 
         val btnSearch = findViewById<Button>(R.id.btnSearch)
-        btnSearch.setOnClickListener { updateFragment(SearchFragment()) }
-
-        val btnNew = findViewById<Button>(R.id.btnNew)
-        btnNew.setOnClickListener {
-            if (!plantViewModel.getPlantIsSet()) {
-                updateFragment(SearchFragment())
-            } else {
-                addNewPlant()
-            }
-        }
+        btnSearch.setOnClickListener{updateFragment(SearchFragment())}
     }
 
     private fun updateFragment(currentFragment: Fragment) {
         supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.main_fragment, currentFragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun addNewPlant() {
-        val builder = AlertDialog.Builder(this)
-        val inflater = layoutInflater
-        plantType = plantViewModel.getSelectedPlant().value!!.name
-        plantName = plantType
-        lateinit var potGroup: RadioGroup
-        lateinit var plantGroup: RadioGroup
-        builder.setTitle("Adding $plantType")
-        val firebase = FirebaseRepository.getInstance()
-
-        val dialogLayout = inflater.inflate(R.layout.add_new_plant, null)
-        editText = dialogLayout.findViewById(R.id.personalName)
-        builder.setView(dialogLayout)
-
-        potGroup = dialogLayout.findViewById(R.id.potGroup)
-        plantGroup = dialogLayout.findViewById(R.id.plantGroup)
-        newViewModel = ViewModelProvider(this).get(AddNewViewModel::class.java)
-
-        potGroup.setOnCheckedChangeListener { potGroup, id ->
-            val rb = potGroup.findViewById(id) as RadioButton
-            newViewModel.setPotSize(rb.text.toString())
-        }
-
-        plantGroup.setOnCheckedChangeListener { plantGroup, id ->
-            val rb = plantGroup.findViewById(id) as RadioButton
-            newViewModel.setPlantSize(rb.text.toString())
-        }
-
-        builder.setPositiveButton("Add $plantType") { _, _ ->
-
-            GlobalScope.launch {
-                if (editText.text.toString().trim().isNotEmpty()) {
-                    plantName = editText.text.toString()
-                }
-                if (validateName()) {
-                    newViewModel.setName(plantName, plantType)
-                    firebase.incrementPlant(plantType)
-                    newViewModel.createNewPersonalPlant()
-                } else {
-                    //editText.error = resources.getString(R.string.nameError)
-                }
-            }
-                Toast.makeText(applicationContext,"$plantType added ", Toast.LENGTH_SHORT).show()
-            }
-
-            builder.setNegativeButton("Cancel") { _, _ ->
-                Toast.makeText( applicationContext,"Action was Cancelled", Toast.LENGTH_SHORT).show()
-            }
-            builder.show()
-
-    }
-
-
-    private fun validateName(): Boolean {
-        if (plantName != plantType) {
-            return PersonalPlantRepository.getInstance().checkPersonalName(plantName)
-        } else {
-            if (PersonalPlantRepository.getInstance().getAllPlantsOfSameType(plantType).isNotEmpty()){
-                plantName += PersonalPlantRepository.getInstance().getAllPlantsOfSameType(plantType).size
-                return true
-            }
-        }
-        return false
+                .beginTransaction()
+                .replace(R.id.main_fragment, currentFragment)
+                .addToBackStack(null)
+                .commit()
     }
 }

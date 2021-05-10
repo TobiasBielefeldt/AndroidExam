@@ -1,5 +1,6 @@
 package com.example.waterapp.models
 
+import android.provider.Settings
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,8 +14,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.helper.ImageHelper
 import com.example.waterapp.helper.TimeHelper
+import com.example.waterapp.repositories.PersonalPlantRepository
 import com.example.waterapp.views.HomeFragment
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 /**
  * Adapter for the [RecyclerView] in [HomeFragment]. Displays [Affirmation] data object.
@@ -52,6 +58,19 @@ class PlantAdapter(
         val plant = plantList[position]
         holder.plantName.text = plant.personalName
         holder.waterTime.text = TimeHelper.getTimeToWater(plant)
+
+        val personalPlantRepository = PersonalPlantRepository.getInstance()
+
+        var btn = holder.btnWater
+
+        btn.setOnClickListener{
+            GlobalScope.launch {
+                plant.lastWatered = System.currentTimeMillis()
+                personalPlantRepository.update(plant)
+            }
+            notifyDataSetChanged()
+        }
+
 
         // add plant images with Glide
         Glide.with(holder.itemView)
