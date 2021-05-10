@@ -1,33 +1,27 @@
 package com.example.waterapp.models
 
-import android.provider.Settings
-import android.view.View
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
-import com.example.waterapp.R
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.waterapp.R
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.helper.ImageHelper
 import com.example.waterapp.helper.TimeHelper
 import com.example.waterapp.repositories.PersonalPlantRepository
 import com.example.waterapp.views.HomeFragment
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 /**
  * Adapter for the [RecyclerView] in [HomeFragment]. Displays [Affirmation] data object.
  */
-class PlantAdapter(
-        private val plantList: List<PersonalPlant>
-) : RecyclerView.Adapter<PlantAdapter.ItemViewHolder>() {
+class PlantAdapter(private val plantList: MutableList<PersonalPlant>) : RecyclerView.Adapter<PlantAdapter.ItemViewHolder>() {
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -95,8 +89,8 @@ class PlantAdapter(
      */
     override fun getItemCount() = plantList.size
 
-    fun removeAt(position: Int) {
-        plantList.drop(position)
+    fun removeStringItem(position: Int) {
+        plantList.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, plantList.size)
     }
