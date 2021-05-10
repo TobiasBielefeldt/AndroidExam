@@ -2,13 +2,11 @@ package com.example.waterapp.views
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
@@ -37,6 +35,7 @@ class HomeFragment : Fragment() {
     private lateinit var nextTip: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var btnDelete: Button
+    private lateinit var plantAdapter: PlantAdapter
 
 
     override fun onCreateView(
@@ -50,7 +49,10 @@ class HomeFragment : Fragment() {
             // Initialize data. Getting the personal plants from database
             personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
             // Adding them to recyclerView
-            recyclerView.adapter = PlantAdapter(personalPlantList)
+            plantAdapter = PlantAdapter(personalPlantList.toMutableList())
+
+
+            recyclerView.adapter = plantAdapter
 
             recyclerView.setHasFixedSize(false)
         }
@@ -105,19 +107,18 @@ class HomeFragment : Fragment() {
 
         builder.setPositiveButton("Delete") { dialogInterface, i ->
             val selectedStrings = ArrayList<String?>()
-
-            for (j in selectedList.indices) {
+            var plantRemoveOutput = ""
+            for (j in selectedList.indices.reversed()) {
                 selectedStrings.add(items[selectedList[j]])
-
+                plantRemoveOutput += items[selectedList[j]] + ", "
                 var index = items.indexOfFirst { it==items[selectedList[j]]}
 
-                recyclerView.adapter!!.notifyItemRemoved(index)
-                recyclerView.adapter!!.notifyDataSetChanged()
-
+                plantAdapter.removeStringItem(index)
             }
 
-            for(personalName in selectedStrings)
-            {
+            var plantRemoveOutputReal = plantRemoveOutput.dropLast(2)
+
+            for(personalName in selectedStrings) {
                 GlobalScope.launch {
                     var personalPlant = personalPlantRepository.getPersonalPlantFromPersonalName(personalName!!)
                     firebaseRepository.decrementPlan(personalPlant.plantType!!)
@@ -126,10 +127,14 @@ class HomeFragment : Fragment() {
                 }
             }
 
-
-            Toast.makeText(context, "Plants deleted: " + selectedStrings.toTypedArray()
-                .contentToString(), Toast.LENGTH_SHORT).show()
-
+            if(selectedList.isEmpty())
+            {
+                Toast.makeText(context, "Nothing Selected", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                Toast.makeText(context, "Plants deleted: $plantRemoveOutputReal", Toast.LENGTH_SHORT).show()
+            }
         }
 
         builder.setNegativeButton("Cancel") { _, _ ->
