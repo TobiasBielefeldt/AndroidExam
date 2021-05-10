@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.waterapp.R
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.core.content.ContentProviderCompat.requireContext
