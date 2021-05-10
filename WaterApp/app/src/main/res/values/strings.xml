@@ -7,7 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-
+    <string name="nameError">This name is already taken</string>
     <string name="databaseError">Error in getting Database Data</string>
     <string name="databaseSucces">Total plants of this type owned by all users:</string>
     <string name="menu_home">Home</string>

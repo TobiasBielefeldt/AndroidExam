@@ -41,16 +41,6 @@ class AddNewViewModel : ViewModel() {
         return personalName
     }
 
-    fun setDefaultName(plant: String) {
-        // if plant already exist in personal home add number to name
-        personalName = if(repository.getAllPlantsOfSameType(plant).isNotEmpty()){
-            plant + repository.getAllPlantsOfSameType(plant).size
-        } else{
-            plant
-        }
-        plantType = plant
-    }
-
     fun createNewPersonalPlant(){
         plant.personalName = personalName
         plant.plantSize = plantSize

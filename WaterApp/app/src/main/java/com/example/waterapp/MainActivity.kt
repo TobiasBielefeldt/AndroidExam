@@ -1,9 +1,6 @@
 package com.example.waterapp
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -18,10 +15,10 @@ import com.example.waterapp.viewmodels.AddNewViewModel
 import com.example.waterapp.viewmodels.PlantViewModel
 import com.example.waterapp.views.HomeFragment
 import com.example.waterapp.views.SearchFragment
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,13 +26,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var plantViewModel: PlantViewModel
     private lateinit var newViewModel: AddNewViewModel
     private lateinit var personalPlantsList: List<PersonalPlant>
+    private lateinit var editText: EditText
+    private lateinit var plantName: String
+    private lateinit var plantType: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var context = this;
         plantViewModel = ViewModelProvider(this).get(PlantViewModel::class.java)
 
-        GlobalScope.launch{
+        GlobalScope.launch {
             AppDatabase.getAppDatabase(context)!!
             personalPlantsList = PersonalPlantRepository.getInstance().getAllPlants()
         }
@@ -49,20 +49,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         val btnHome = findViewById<Button>(R.id.btnHome)
-        btnHome.setOnClickListener{updateFragment(HomeFragment())}
+        btnHome.setOnClickListener { updateFragment(HomeFragment()) }
 
         val btnSearch = findViewById<Button>(R.id.btnSearch)
-        btnSearch.setOnClickListener{updateFragment(SearchFragment())}
+        btnSearch.setOnClickListener { updateFragment(SearchFragment()) }
 
         val btnNew = findViewById<Button>(R.id.btnNew)
-        btnNew.setOnClickListener{
-            if(!plantViewModel.getPlantIsSet()) {
-                    updateFragment(SearchFragment())
+        btnNew.setOnClickListener {
+            if (!plantViewModel.getPlantIsSet()) {
+                updateFragment(SearchFragment())
             } else {
                 addNewPlant()
             }
         }
     }
+
     private fun updateFragment(currentFragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
@@ -74,15 +75,15 @@ class MainActivity : AppCompatActivity() {
     private fun addNewPlant() {
         val builder = AlertDialog.Builder(this)
         val inflater = layoutInflater
-        val plantName = plantViewModel.getSelectedPlant().value!!.name
+        plantType = plantViewModel.getSelectedPlant().value!!.name
+        plantName = plantType
         lateinit var potGroup: RadioGroup
         lateinit var plantGroup: RadioGroup
-        builder.setTitle("Adding $plantName")
+        builder.setTitle("Adding $plantType")
         val firebase = FirebaseRepository.getInstance()
 
         val dialogLayout = inflater.inflate(R.layout.add_new_plant, null)
-        val editText  = dialogLayout.findViewById<EditText>(R.id.personalName)
-
+        editText = dialogLayout.findViewById(R.id.personalName)
         builder.setView(dialogLayout)
 
         potGroup = dialogLayout.findViewById(R.id.potGroup)
@@ -99,26 +100,40 @@ class MainActivity : AppCompatActivity() {
             newViewModel.setPlantSize(rb.text.toString())
         }
 
-        builder.setPositiveButton("Add $plantName") { _, _ ->
+        builder.setPositiveButton("Add $plantType") { _, _ ->
 
             GlobalScope.launch {
-                //check if the EditText have values or not
                 if (editText.text.toString().trim().isNotEmpty()) {
-                    newViewModel.setName(editText.text.toString(), plantName)
-                } else {
-                    newViewModel.setDefaultName(plantName)
+                    plantName = editText.text.toString()
                 }
-                firebase.incrementPlant(plantName)
-                newViewModel.createNewPersonalPlant()
+                if (validateName()) {
+                    newViewModel.setName(plantName, plantType)
+                    firebase.incrementPlant(plantType)
+                    newViewModel.createNewPersonalPlant()
+                } else {
+                    //editText.error = resources.getString(R.string.nameError)
+                }
+            }
+                Toast.makeText(applicationContext,"$plantType added ", Toast.LENGTH_SHORT).show()
+            }
 
+            builder.setNegativeButton("Cancel") { _, _ ->
+                Toast.makeText( applicationContext,"Action was Cancelled", Toast.LENGTH_SHORT).show()
             }
-            Toast.makeText(applicationContext,
-                    "$plantName added ", Toast.LENGTH_SHORT).show()
+            builder.show()
+
+    }
+
+
+    private fun validateName(): Boolean {
+        if (plantName != plantType) {
+            return PersonalPlantRepository.getInstance().checkPersonalName(plantName)
+        } else {
+            if (PersonalPlantRepository.getInstance().getAllPlantsOfSameType(plantType).isNotEmpty()){
+                plantName += PersonalPlantRepository.getInstance().getAllPlantsOfSameType(plantType).size
+                return true
             }
-        builder.setNegativeButton("Cancel") { _, _ ->
-            Toast.makeText(applicationContext,
-                    "Action was Cancelled", Toast.LENGTH_SHORT).show()
         }
-        builder.show()
+        return false
     }
 }
