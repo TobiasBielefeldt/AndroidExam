@@ -6,19 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.waterapp.R
 import com.example.waterapp.helper.ImageHelper
 import com.example.waterapp.repositories.FirebaseRepository
+import com.example.waterapp.viewmodels.AddNewViewModel
 import com.example.waterapp.viewmodels.PlantViewModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class InformationFragment : Fragment() {
 
@@ -32,6 +37,7 @@ class InformationFragment : Fragment() {
     private lateinit var userView: TextView
     private lateinit var waterIcons: LinearLayout
     private lateinit var sunIcons: LinearLayout
+    private lateinit var newViewModel: AddNewViewModel
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +53,7 @@ class InformationFragment : Fragment() {
         waterView = root.findViewById(R.id.waterNeed)
         waterIcons = root.findViewById(R.id.waterIcons)
         userView = root.findViewById(R.id.userScore)
+
 
         return root
     }
@@ -107,5 +114,68 @@ class InformationFragment : Fragment() {
             }
         }
 
+        val btnNew = root.findViewById<Button>(R.id.btnNew)
+        btnNew.setOnClickListener{
+            if(plantViewModel.getPlantIsSet()) {
+                addNewPlant()
+            }
+        }
+
+
     }
+
+    private fun addNewPlant() {
+        val builder = context?.let { AlertDialog.Builder(it) }
+        val alertDialog = context?.let { AlertDialog.Builder(it).create() }
+        val inflater = layoutInflater
+        val plantName = plantViewModel.getSelectedPlant().value!!.name
+        lateinit var potGroup: RadioGroup
+        lateinit var plantGroup: RadioGroup
+        builder!!.setTitle("Adding $plantName")
+        val firebase = FirebaseRepository.getInstance()
+
+
+        val dialogLayout = inflater.inflate(R.layout.add_new_plant, null)
+        val editText  = dialogLayout.findViewById<EditText>(R.id.personalName)
+
+        builder.setView(dialogLayout)
+
+        potGroup = dialogLayout.findViewById(R.id.potGroup)
+        plantGroup = dialogLayout.findViewById(R.id.plantGroup)
+        newViewModel = ViewModelProvider(this).get(AddNewViewModel::class.java)
+
+        potGroup.setOnCheckedChangeListener { potGroup, id ->
+            val rb = potGroup.findViewById(id) as RadioButton
+            newViewModel.setPotSize(rb.text.toString())
+        }
+
+        plantGroup.setOnCheckedChangeListener { plantGroup, id ->
+            val rb = plantGroup.findViewById(id) as RadioButton
+            newViewModel.setPlantSize(rb.text.toString())
+        }
+
+        builder.setPositiveButton("Add $plantName") { _, _ ->
+
+            GlobalScope.launch {
+                //check if the EditText have values or not
+                if (editText.text.toString().trim().isNotEmpty()) {
+                    newViewModel.setName(editText.text.toString(), plantName)
+                } else {
+                    newViewModel.setDefaultName(plantName)
+                }
+                firebase.incrementPlant(plantName)
+                newViewModel.createNewPersonalPlant()
+
+            }
+            Toast.makeText(root.context,
+                    "$plantName added ", Toast.LENGTH_SHORT).show()
+        }
+        builder.setNegativeButton("Cancel") { _, _ ->
+            Toast.makeText(root.context,
+                    "Action was Cancelled", Toast.LENGTH_SHORT).show()
+        }
+        builder.show()
+    }
+
+
 }

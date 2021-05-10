@@ -4,6 +4,8 @@ import java.util.*
 
 class Plant {
         //We decided to not make this into a room database as we did not feel like it was needed
+        //This should properly all be stored in a database somewhere and then downloaded to the phone the first time you use the app
+        //But since we already have firebase and database it does not seem needed to make
         var name: String = ""
         var description: String? = null
         var sunNeed: Int = 0

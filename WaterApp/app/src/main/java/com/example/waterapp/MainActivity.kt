@@ -45,75 +45,12 @@ class MainActivity : AppCompatActivity() {
 
         val btnSearch = findViewById<Button>(R.id.btnSearch)
         btnSearch.setOnClickListener{updateFragment(SearchFragment())}
-
-        plantViewModel = ViewModelProvider(this).get(PlantViewModel::class.java)
-        val btnNew = findViewById<Button>(R.id.btnNew)
-        btnNew.setOnClickListener{
-            if(!plantViewModel.getPlantIsSet()) {
-                    updateFragment(SearchFragment())
-            } else {
-                addNewPlant()
-            }
-        }
     }
     private fun updateFragment(currentFragment: Fragment) {
         supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.main_fragment, currentFragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun addNewPlant() {
-        val builder = AlertDialog.Builder(this)
-        val alertDialog = AlertDialog.Builder(this).create()
-        val inflater = layoutInflater
-        val plantName = plantViewModel.getSelectedPlant().value!!.name
-        lateinit var potGroup: RadioGroup
-        lateinit var plantGroup: RadioGroup
-        builder.setTitle("Adding $plantName")
-        val firebase = FirebaseRepository.getInstance()
-
-
-        val dialogLayout = inflater.inflate(R.layout.add_new_plant, null)
-        val editText  = dialogLayout.findViewById<EditText>(R.id.personalName)
-
-        builder.setView(dialogLayout)
-
-        potGroup = dialogLayout.findViewById(R.id.potGroup)
-        plantGroup = dialogLayout.findViewById(R.id.plantGroup)
-        newViewModel = ViewModelProvider(this).get(AddNewViewModel::class.java)
-
-        potGroup.setOnCheckedChangeListener { potGroup, id ->
-            val rb = potGroup.findViewById(id) as RadioButton
-            newViewModel.setPotSize(rb.text.toString())
-        }
-
-        plantGroup.setOnCheckedChangeListener { plantGroup, id ->
-            val rb = plantGroup.findViewById(id) as RadioButton
-            newViewModel.setPlantSize(rb.text.toString())
-        }
-
-        builder.setPositiveButton("Add $plantName") { _, _ ->
-
-            GlobalScope.launch {
-                //check if the EditText have values or not
-                if (editText.text.toString().trim().isNotEmpty()) {
-                    newViewModel.setName(editText.text.toString(), plantName)
-                } else {
-                    newViewModel.setDefaultName(plantName)
-                }
-                firebase.incrementPlant(plantName)
-                newViewModel.createNewPersonalPlant()
-
-            }
-            Toast.makeText(applicationContext,
-                    "$plantName added ", Toast.LENGTH_SHORT).show()
-            }
-        builder.setNegativeButton("Cancel") { _, _ ->
-            Toast.makeText(applicationContext,
-                    "Action was Cancelled", Toast.LENGTH_SHORT).show()
-        }
-        builder.show()
+                .beginTransaction()
+                .replace(R.id.main_fragment, currentFragment)
+                .addToBackStack(null)
+                .commit()
     }
 }
