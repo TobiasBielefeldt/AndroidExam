@@ -42,7 +42,7 @@ class InformationFragment : Fragment() {
     private lateinit var newViewModel: AddNewViewModel
     private lateinit var plantName: String
     private lateinit var plantType: String
-    private lateinit var personalPlantList: List<PersonalPlant>
+    private var personalPlantListName: MutableList<String> = emptyArray<String>().toMutableList()
 
 
     override fun onCreateView(
@@ -90,7 +90,12 @@ class InformationFragment : Fragment() {
             .addValueEventListener(valueEventListener)
 
         GlobalScope.launch {
-            personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
+            var personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
+            for(personalPlant in personalPlantList)
+            {
+                personalPlantListName.add(personalPlant.personalName!!)
+            }
+
         }
 
         var plant = plantViewModel.getSelectedPlant()
@@ -166,26 +171,27 @@ class InformationFragment : Fragment() {
         }
 
         builder.setPositiveButton("Add $plantType") { _, _ ->
-            if(editText.text.toString().trim().isEmpty()){
-                var count = 0
-                for (plant in personalPlantList) {
-                    if (plant.plantType == plantType) {
-                        count++
-                    }
-                }
-                plantName += count
-            } else {
+            if(editText.text.toString().trim().isNotEmpty()) {
                 plantName = editText.text.toString()
-                for (plant in personalPlantList) {
-                    while(plant.personalName == plantName){
-                        plantName = "New $plantName"
-                    }
-                }
+            } else {
+                plantName = plantType
             }
+
+            while (personalPlantListName.contains(plantName))
+            {
+                plantName = "New $plantName"
+            }
+
             newViewModel.setName(plantName, plantType)
             GlobalScope.launch {
                 firebase.incrementPlant(plantType)
                 newViewModel.createNewPersonalPlant()
+                var personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
+                personalPlantListName.clear()
+                for(personalPlant in personalPlantList)
+                {
+                    personalPlantListName.add(personalPlant.personalName!!)
+                }
             }
 
             Toast.makeText(context, "$plantName added ", Toast.LENGTH_SHORT).show()

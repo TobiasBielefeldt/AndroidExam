@@ -101,7 +101,8 @@ class PlantAdapter(private val plantList: MutableList<PersonalPlant>) : Recycler
     }
 
     fun updateItems(personalPlantList: MutableList<PersonalPlant>) {
-        for(personalPlant in personalPlantList)
+        var reversList = personalPlantList.reversed()
+        for(personalPlant in reversList)
         {
             plantList.add(0,personalPlant)
             notifyItemInserted(0)

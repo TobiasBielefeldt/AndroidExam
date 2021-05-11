@@ -107,11 +107,20 @@ class HomeFragment : Fragment() {
         builder.setPositiveButton("Delete") { dialogInterface, i ->
             val selectedStrings = ArrayList<String?>()
             var plantRemoveOutput = ""
-            for (j in selectedList.indices.reversed()) {
+
+            var indexes = mutableListOf<Int>()
+
+            for (j in selectedList.indices) {
                 selectedStrings.add(items[selectedList[j]])
                 plantRemoveOutput += items[selectedList[j]] + ", "
-                var index = items.indexOfFirst { it==items[selectedList[j]]}
+                indexes.add(items.indexOfFirst { it==items[selectedList[j]]})
 
+            }
+
+            indexes.sort()
+
+            for(index in indexes.reversed())
+            {
                 plantAdapter.removeStringItem(index)
             }
 
