@@ -7,8 +7,10 @@
     tools:context=".views.HomeFragment">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/btnDelete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,72 +42,65 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
         android:text="@string/delete_a_plant"
-        app:layout_constraintBottom_toTopOf="@+id/tipBackground"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/tipOfTheDay"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
-        android:layout_height="17dp"
-        android:fontFamily="serif-monospace"
-        android:text="@string/tip_of_the_day"
-        android:textColor="#009688"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tipBackground" />
-
-    <TextView
-        android:id="@+id/tipView"
-        android:layout_width="0dp"
-        android:layout_height="15dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:fontFamily="serif-monospace"
-        android:gravity="center"
-        android:text="@string/tip"
-        android:textColor="#373737"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tipOfTheDay"
-        app:layout_constraintVertical_bias="0.186" />
-
-    <TextView
-        android:id="@+id/nextTip"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:fontFamily="serif-monospace"
-        android:text="@string/nextTip"
-        android:textColor="@color/teal_200"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tipBackground"
-        app:layout_constraintEnd_toEndOf="@+id/tipBackground"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/tipBackground" />
-
-    <TextView
-        android:id="@+id/tipBackground"
-        android:layout_width="0dp"
-        android:layout_height="81dp"
-        android:layout_marginBottom="8dp"
-        android:background="#0D000000"
+        android:layout_marginBottom="4dp"
+        android:background="#77E3E3E3"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tipOfTheDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="serif-monospace"
+            android:text="@string/tip_of_the_day"
+            android:textColor="#009688"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tipView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="serif-monospace"
+            android:gravity="center"
+            android:text="@string/tip"
+            android:textColor="#373737"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/nextTip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="serif-monospace"
+            android:gravity="end"
+            android:text="@string/nextTip"
+            android:textColor="@color/teal_200"
+            android:textSize="16sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
