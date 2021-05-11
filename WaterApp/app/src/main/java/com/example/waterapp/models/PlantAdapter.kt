@@ -1,5 +1,6 @@
 package com.example.waterapp.models
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +52,11 @@ class PlantAdapter(private val plantList: MutableList<PersonalPlant>) : Recycler
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val plant = plantList[position]
         holder.plantName.text = plant.personalName
-        holder.waterTime.text = TimeHelper.getTimeToWater(plant)
+        val time = TimeHelper.getTimeToWater(plant)
+        holder.waterTime.text = time
+        if(time[0] == '-') {
+            holder.waterTime.setTextColor(Color.RED)
+        }
 
         val personalPlantRepository = PersonalPlantRepository.getInstance()
 
