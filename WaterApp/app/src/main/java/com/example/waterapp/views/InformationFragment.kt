@@ -11,7 +11,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.waterapp.R
@@ -111,10 +110,9 @@ class InformationFragment : Fragment() {
                 var imageView = ImageView(this.requireContext())
                 Glide.with(requireContext())
                     .load(R.drawable.sun)
+                        .apply(RequestOptions().override(70,70))
                     .into(imageView)
                 sunIcons.addView(imageView)
-                imageView.layoutParams.height = 100
-                imageView.layoutParams.width = 100
             }
             val waterPair: Pair<Int, String> = plantViewModel.transformWaterNeed(plant.value!!.waterNeed)
             waterView.text = waterPair.second
@@ -122,10 +120,9 @@ class InformationFragment : Fragment() {
                 var imageView = ImageView(this.requireContext())
                 Glide.with(requireContext())
                     .load(R.drawable.water_drop)
+                        .apply(RequestOptions().override(70,70))
                     .into(imageView)
                 waterIcons.addView(imageView)
-                imageView.layoutParams.height = 100
-                imageView.layoutParams.width = 100
             }
 
 
