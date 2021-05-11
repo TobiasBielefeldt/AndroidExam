@@ -94,19 +94,20 @@ class InformationFragment : Fragment() {
             personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
         }
 
-        plantViewModel.getSelectedPlant().observe(viewLifecycleOwner) {
+        var plant = plantViewModel.getSelectedPlant()
+
             Glide.with(requireContext())
                 .clear(imageView)
             Glide.with(requireContext())
-                .load(ImageHelper.getImage(it.name))
+                .load(ImageHelper.getImage(plant.value!!.name))
                 .apply(RequestOptions().circleCrop())
                 .into(imageView)
-            nameView.text = it.name
+            nameView.text = plant.value!!.name
 
 
-            descriptionView.text = it.description
-            sunView.text = plantViewModel.getSunDescription(it.sunNeed)
-            repeat(it.sunNeed) {
+            descriptionView.text = plant.value!!.description
+            sunView.text = plantViewModel.getSunDescription(plant.value!!.sunNeed)
+            repeat(plant.value!!.sunNeed) {
                 var imageView = ImageView(this.requireContext())
                 Glide.with(requireContext())
                     .load(R.drawable.sun)
@@ -115,7 +116,7 @@ class InformationFragment : Fragment() {
                 imageView.layoutParams.height = 100
                 imageView.layoutParams.width = 100
             }
-            val waterPair: Pair<Int, String> = plantViewModel.transformWaterNeed(it.waterNeed)
+            val waterPair: Pair<Int, String> = plantViewModel.transformWaterNeed(plant.value!!.waterNeed)
             waterView.text = waterPair.second
             repeat(waterPair.first) {
                 var imageView = ImageView(this.requireContext())
@@ -126,7 +127,7 @@ class InformationFragment : Fragment() {
                 imageView.layoutParams.height = 100
                 imageView.layoutParams.width = 100
             }
-        }
+
 
         val btnNew = root.findViewById<Button>(R.id.btnNew)
         btnNew.setOnClickListener {

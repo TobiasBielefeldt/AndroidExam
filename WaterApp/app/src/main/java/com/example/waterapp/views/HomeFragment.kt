@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterapp.R
@@ -72,10 +73,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Observe the Tip LiveData and update the view on change
-        tipViewModel.tip.observe(viewLifecycleOwner) { tip ->
+        tipViewModel.tip.observe(viewLifecycleOwner, Observer { tip ->
             tipView.text = tip.text
-        }
-
+        })
         nextTip.setOnClickListener { tipViewModel.randomTip() }
 
         btnDelete.setOnClickListener{delete()}
