@@ -93,6 +93,7 @@
 
         <Button
             android:id="@+id/btnNew"
+            android:textSize="32sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
