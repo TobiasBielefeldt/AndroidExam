@@ -7,8 +7,9 @@
 
     <Button
         android:id="@+id/btnNew"
+        android:textSize="32sp"
         android:layout_width="0dp"
-        android:layout_height="54dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="8dp"
