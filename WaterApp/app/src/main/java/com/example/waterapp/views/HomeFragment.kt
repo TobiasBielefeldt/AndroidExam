@@ -10,14 +10,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterapp.R
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.models.PlantAdapter
 import com.example.waterapp.repositories.FirebaseRepository
 import com.example.waterapp.repositories.PersonalPlantRepository
-import com.example.waterapp.viewmodels.HomeViewModel
 import com.example.waterapp.viewmodels.TipViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -26,7 +24,6 @@ import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
-    private val homeViewModel: HomeViewModel by activityViewModels()
     private lateinit var root: ConstraintLayout
     private lateinit var personalPlantList: List<PersonalPlant>
 
