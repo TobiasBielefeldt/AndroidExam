@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterapp.R
 import com.example.waterapp.database.PersonalPlant
@@ -43,17 +44,18 @@ class HomeFragment : Fragment() {
         root = inflater.inflate(R.layout.home_fragment, container, false) as ConstraintLayout
         recyclerView = root.findViewById<RecyclerView>(R.id.plantRecyclerView)
 
+        //Give an empty list
+        plantAdapter = PlantAdapter(emptyArray<PersonalPlant>().toMutableList())
+        recyclerView.adapter = plantAdapter
+        recyclerView.setHasFixedSize(true)
+
         GlobalScope.launch {
             // Initialize data. Getting the personal plants from database
             personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
-            // Adding them to recyclerView
-            plantAdapter = PlantAdapter(personalPlantList.toMutableList())
-
-
-            recyclerView.adapter = plantAdapter
-
-            recyclerView.setHasFixedSize(false)
+            //And then update the adapter when we have the data
+            plantAdapter.updateItems(personalPlantList.toMutableList())
         }
+
 
         //Delete Button
         btnDelete = root.findViewById<Button>(R.id.btnDelete)

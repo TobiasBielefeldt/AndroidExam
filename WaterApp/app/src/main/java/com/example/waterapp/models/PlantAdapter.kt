@@ -99,4 +99,12 @@ class PlantAdapter(private val plantList: MutableList<PersonalPlant>) : Recycler
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, plantList.size)
     }
+
+    fun updateItems(personalPlantList: MutableList<PersonalPlant>) {
+        for(personalPlant in personalPlantList)
+        {
+            plantList.add(0,personalPlant)
+            notifyItemInserted(0)
+        }
+    }
 }
