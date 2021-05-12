@@ -2,9 +2,6 @@ package com.example.waterapp.repositories
 
 import com.example.waterapp.models.Tip
 
-/**
- * This class simulates calls to an API to get random tips
- */
 class TipRepository {
 
     private val tips: MutableList<Tip> = ArrayList()

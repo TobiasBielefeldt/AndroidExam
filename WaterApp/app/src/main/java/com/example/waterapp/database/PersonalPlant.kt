@@ -18,9 +18,9 @@ class PersonalPlant {
     @NonNull
     var plantType: String? = null
 
+    //Plant size and pot size have an impact on how often you should water the plant
     @JvmField
     var plantSize: Int = 0
-
     @JvmField
     var potSize: Int = 0
 
@@ -29,6 +29,7 @@ class PersonalPlant {
 
     companion object {
 
+        //Test funktion, we don't use it anymore
         fun getBasicPlant(): PersonalPlant?
         {
             val plant = PersonalPlant()

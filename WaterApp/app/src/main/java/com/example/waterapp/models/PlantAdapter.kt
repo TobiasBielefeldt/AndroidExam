@@ -19,15 +19,11 @@ import com.example.waterapp.views.HomeFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-/**
- * Adapter for the [RecyclerView] in [HomeFragment]. Displays [Affirmation] data object.
- */
+
 class PlantAdapter(private val plantList: MutableList<PersonalPlant>) : RecyclerView.Adapter<PlantAdapter.ItemViewHolder>() {
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder.
-    // Each data item is just an Affirmation object.
+    //Provide a reference to the views for each data item
+
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val plantImage: ImageView = view.findViewById(R.id.plant_image)
         val plantName: TextView = view.findViewById(R.id.plant_name)
@@ -35,9 +31,8 @@ class PlantAdapter(private val plantList: MutableList<PersonalPlant>) : Recycler
         val btnWater: ImageButton = view.findViewById(R.id.btn_water)
     }
 
-    /**
-     * Create new views (invoked by the layout manager)
-     */
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         // create a new view
         val adapterLayout = LayoutInflater.from(parent.context)
@@ -46,9 +41,7 @@ class PlantAdapter(private val plantList: MutableList<PersonalPlant>) : Recycler
         return ItemViewHolder(adapterLayout)
     }
 
-    /**
-     * Replace the contents of a view (invoked by the layout manager)
-     */
+
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val plant = plantList[position]
         holder.plantName.text = plant.personalName
@@ -62,6 +55,8 @@ class PlantAdapter(private val plantList: MutableList<PersonalPlant>) : Recycler
 
         var btn = holder.btnWater
 
+        //Button clicklistener, updates the plant with a new "last watered time"
+        //And then calls notify to update the view
         btn.setOnClickListener{
             GlobalScope.launch {
                 plant.lastWatered = System.currentTimeMillis()
@@ -89,21 +84,26 @@ class PlantAdapter(private val plantList: MutableList<PersonalPlant>) : Recycler
 
     }
 
-    /**
-     * Return the size of your dataset (invoked by the layout manager)
-     */
+
+    //Return the size of your dataset (invoked by the layout manager)
+
     override fun getItemCount() = plantList.size
 
-    fun removeStringItem(position: Int) {
+    //Removes an item from the dataset at the given position
+    //Also calls "Notify" to update
+    fun removeItem(position: Int) {
         plantList.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, plantList.size)
     }
 
+    //Since this class needs data from the database, and we can't run the database querys on the main thread
+    //I was necessary to make a method that allows us to change the dataset when the database query is done
     fun updateItems(personalPlantList: MutableList<PersonalPlant>) {
-        var reversList = personalPlantList.reversed()
-        for(personalPlant in reversList)
+        //Since we post them all at index 0 we do it in revers so the last one that gets added is at index 0, which is the first one in the dataset
+        for(personalPlant in personalPlantList.reversed())
         {
+            //Posting them all at index 0 was the simplest solution
             plantList.add(0,personalPlant)
             notifyItemInserted(0)
         }
