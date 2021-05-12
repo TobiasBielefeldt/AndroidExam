@@ -1,10 +1,8 @@
 package com.example.waterapp.database
 
-import android.content.Context
 import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
 
 
 @Entity(tableName = "personalPlant")

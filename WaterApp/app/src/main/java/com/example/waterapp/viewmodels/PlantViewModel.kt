@@ -1,12 +1,9 @@
 package com.example.waterapp.viewmodels
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.waterapp.database.Plant
 import com.example.waterapp.repositories.PlantRepository
-import java.util.*
 
 class PlantViewModel : ViewModel(){
     private lateinit var plants: List<Plant>

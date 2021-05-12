@@ -1,6 +1,5 @@
 package com.example.waterapp.repositories
 
-import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot

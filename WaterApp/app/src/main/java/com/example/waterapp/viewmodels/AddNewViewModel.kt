@@ -3,7 +3,6 @@ package com.example.waterapp.viewmodels
 import androidx.lifecycle.ViewModel
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.repositories.PersonalPlantRepository
-import java.util.*
 
 class AddNewViewModel : ViewModel() {
 

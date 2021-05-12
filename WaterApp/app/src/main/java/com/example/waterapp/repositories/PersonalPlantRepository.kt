@@ -1,7 +1,5 @@
 package com.example.waterapp.repositories
 
-import android.content.Context
-import androidx.room.Room
 import com.example.waterapp.database.AppDatabase
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.database.PersonalPlantDao

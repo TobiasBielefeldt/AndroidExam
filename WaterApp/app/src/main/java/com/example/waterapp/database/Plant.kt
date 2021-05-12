@@ -1,7 +1,5 @@
 package com.example.waterapp.database
 
-import java.util.*
-
 class Plant {
         //We decided to not make this into a room database as we did not feel like it was needed
         //This should properly all be stored in a database somewhere and then downloaded to the phone the first time you use the app

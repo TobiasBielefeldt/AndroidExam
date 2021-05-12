@@ -1,11 +1,8 @@
 package com.example.waterapp.helper
 
-import android.util.Log
 import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.repositories.PlantRepository
-import kotlinx.coroutines.newFixedThreadPoolContext
 import java.util.concurrent.TimeUnit
-import android.util.Log.w as w1
 
 class TimeHelper {
     companion object {

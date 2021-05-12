@@ -15,7 +15,6 @@ import com.example.waterapp.database.PersonalPlant
 import com.example.waterapp.helper.ImageHelper
 import com.example.waterapp.helper.TimeHelper
 import com.example.waterapp.repositories.PersonalPlantRepository
-import com.example.waterapp.views.HomeFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
