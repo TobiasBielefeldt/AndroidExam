@@ -13,7 +13,7 @@ class PersonalPlantRepository(private val personalPlantDao: PersonalPlantDao) {
         return personalPlantDao.getAllPersonalPlants()
     }
 
-    //Gets a list of all personalplants in the database
+    //Gets a list of all personalplants in the database of a type
     fun getAllPlantsOfSameType(type: String): List<PersonalPlant>{
         return personalPlantDao.getAllPersonalPlantsOfSameType(type)
     }
@@ -24,7 +24,7 @@ class PersonalPlantRepository(private val personalPlantDao: PersonalPlantDao) {
         personalPlantDao.insert(personalPlant)
     }
 
-    //Gets a count of how many there is (This was mostly used for testing but I might be usefull)
+    //Gets a count of how many there is
     fun count(): Int {
         return personalPlantDao.countPlants()
     }
@@ -50,7 +50,7 @@ class PersonalPlantRepository(private val personalPlantDao: PersonalPlantDao) {
     }
 
     companion object {
-        // Singleton to prevent multiple instances from existing (It's also just really cool imo)
+        // Singleton to prevent multiple instances from existing
         private var INSTANCE: PersonalPlantRepository? = null
 
         fun getInstance(): PersonalPlantRepository {

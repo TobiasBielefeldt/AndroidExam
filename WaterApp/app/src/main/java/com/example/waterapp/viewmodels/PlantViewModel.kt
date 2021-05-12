@@ -4,51 +4,40 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.example.waterapp.R
 import com.example.waterapp.database.Plant
+import com.example.waterapp.repositories.PlantRepository
+import java.util.*
 
 class PlantViewModel : ViewModel(){
     private lateinit var plants: List<Plant>
-    private lateinit var PlantNames: MutableList<String>
+    private lateinit var plantNames: MutableList<String>
+
     private var selectedPlant:  MutableLiveData<Plant> = MutableLiveData()
-    private val PlantRepository = com.example.waterapp.repositories.PlantRepository
-    private var plantIsSet: Boolean = false;
+    private val plantRepository = PlantRepository.getInstance()
 
     init {
         loadPlants()
         loadPlantNames()
     }
 
-    fun getSelectedPlant(): LiveData<Plant> {
+    fun getSelectedPlant(): MutableLiveData<Plant> {
         return selectedPlant
     }
 
-    fun getPlantIsSet(): Boolean{
-        return plantIsSet
-    }
-
-    fun selectPlant(name: String) {
-        selectedPlant.value = PlantRepository.getInstance().getPlantFromName(name)!!
-        plantIsSet = true
-
-    }
-
-    fun deselectPlant(){
-        plantIsSet = false
+    fun setSelectedPlant(name: String) {
+        selectedPlant.value = plantRepository.getPlantFromName(name)!!
     }
 
     fun getPlantNames(): MutableList<String> {
-        return PlantNames
+        return plantNames
     }
 
     private fun loadPlantNames() {
-        PlantNames = PlantRepository.getInstance().getAllPlantNames()
+        plantNames = plantRepository.getAllPlantNames()
     }
 
     private fun loadPlants() {
-        plants = PlantRepository.getInstance().getAllPlants()
+        plants = plantRepository.getAllPlants()
     }
 
     fun transformWaterNeed(waterNeed: Int): Pair<Int, String>{

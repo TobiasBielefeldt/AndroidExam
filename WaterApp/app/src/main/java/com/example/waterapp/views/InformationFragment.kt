@@ -43,15 +43,15 @@ class InformationFragment : Fragment() {
     private lateinit var plantName: String
     private lateinit var plantType: String
     private var personalPlantListName: MutableList<String> = emptyArray<String>().toMutableList()
-
+    private var userViewStringSucces: String? = null
+    private var userViewStringError: String? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?): View {
 
         root = inflater.inflate(R.layout.information_fragment, container, false) as ConstraintLayout
-
         imageView = root.findViewById(R.id.imageView)
         nameView = root.findViewById(R.id.plantName)
         descriptionView = root.findViewById(R.id.plantDescription)
@@ -61,13 +61,11 @@ class InformationFragment : Fragment() {
         waterIcons = root.findViewById(R.id.waterIcons)
         userView = root.findViewById(R.id.userScore)
 
+        userViewStringSucces = resources.getString(R.string.databaseSucces)
+        userViewStringError = resources.getString(R.string.databaseError)
+
 
         return root
-    }
-
-    override fun onPause() {
-        super.onPause()
-        plantViewModel.deselectPlant()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,12 +75,11 @@ class InformationFragment : Fragment() {
             @SuppressLint("SetTextI18n")
             override fun onDataChange(snapshot: DataSnapshot) {
                 //Write code here (This prints as an example)
-                userView.text =
-                    resources.getString(R.string.databaseSucces) + " " + snapshot.value.toString()
+                userView.text = userViewStringSucces + " " + snapshot.value.toString()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                userView.text = resources.getString(R.string.databaseError)
+                userView.text = userViewStringError
             }
         }
         //Adds the valueEventListner to a plant with the id
@@ -133,12 +130,8 @@ class InformationFragment : Fragment() {
 
         val btnNew = root.findViewById<Button>(R.id.btnNew)
         btnNew.setOnClickListener {
-            if (plantViewModel.getPlantIsSet()) {
-                addNewPlant()
-            }
+            addNewPlant()
         }
-
-
     }
 
 
@@ -184,7 +177,7 @@ class InformationFragment : Fragment() {
 
             newViewModel.setName(plantName, plantType)
             GlobalScope.launch {
-                firebase.incrementPlant(plantType)
+                firebase.incrementPlant(plantType,1)
                 newViewModel.createNewPersonalPlant()
                 var personalPlantList = PersonalPlantRepository.getInstance().getAllPlants()
                 personalPlantListName.clear()

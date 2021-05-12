@@ -14,6 +14,7 @@ class PlantRepository()
     }
 
     //This Repository works the same way as the PersonalPlantRepository so look at that if you need help
+    //The data is just stored here and not in a database
     fun getAllPlants(): List<Plant>{
         return plantDatabase
     }
