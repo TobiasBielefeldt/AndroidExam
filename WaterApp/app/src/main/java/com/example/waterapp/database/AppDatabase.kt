@@ -16,9 +16,9 @@ abstract class AppDatabase : RoomDatabase() {
         fun getAppDatabase(context: Context): AppDatabase? {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "plant-database")
-                    // Allow queries on the main thread.
-                    // Don't do this on a real app!
-                    //.allowMainThreadQueries
+                        //We do not allow database access on the main thread
+                        //fallbackToDestructiveMigration is not ideal since if we update something it will delete a users info
+                        //But for this project it's fine
                     .fallbackToDestructiveMigration()
                     .build()
             }

@@ -9,7 +9,8 @@ import android.util.Log.w as w1
 
 class TimeHelper {
     companion object {
-        //Retuns -1 if plant not found
+        //Returns a string in the format "days:hours:minutes"
+        //This is the time until the plants needs to get watered again
         fun getTimeToWater(plant: PersonalPlant): String {
             val lastWatered = plant.lastWatered
             val potSize = plant.potSize

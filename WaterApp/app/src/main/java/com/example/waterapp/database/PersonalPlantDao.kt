@@ -5,6 +5,8 @@ import androidx.room.*
 @Dao
 interface PersonalPlantDao {
 
+    //All querys should be self explanatory
+
     @Query("SELECT * FROM personalPlant")
     fun getAllPersonalPlants(): List<PersonalPlant>
 
